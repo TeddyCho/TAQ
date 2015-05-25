@@ -101,8 +101,8 @@ if(TRUE){
   p = createMultiBarProportioned(myBreakdown, mySymbols, "Open", c("NASDAQ", "NYSEMKT", "Arca", "NYSE"))
   p  
   
-  p <- createBySymbolForTOD(myBreakdown, myNASDAQSymbols, c("After-Hours"))
-  p$save('nasdaqAfter.html', standalone = TRUE)
+  p <- createBySymbolForTOD(myBreakdown, myNYSESymbols, c("Regular"))
+  p$save('nyseReg.html', standalone = TRUE)
   
   p <- createByListedExchangeForTOD(myBreakdown, c("NASDAQ", "NYSEMKT", "Arca", "NYSE"), c("After-Hours"))
   p$save('listedExchangeAfter.html', standalone = TRUE)

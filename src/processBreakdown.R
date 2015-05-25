@@ -96,8 +96,10 @@ createByListedExchangeForTOD <- function(myBreakdown, myListedExchanges, aTODs){
 if(TRUE){
   opts_chunk$set(comment = NA, results = "asis", comment = NA, tidy = F)
   myResults <- createAggregateMultiBar(myBreakdown, "1000000000", "billions")
-  myResults$plot$show('iframesrc', cdn = TRUE)
+  myResults$plot$save('AllStocks.html', standalone = TRUE)
   myResults$collapsed$Proportion = round(100*myResults$collapsed$Volume / sum(myResults$collapsed$Volume), 4)
+  
+  
   p = createMultiBarProportioned(myBreakdown, mySymbols, "Open", c("NASDAQ", "NYSEMKT", "Arca", "NYSE"))
   p  
   

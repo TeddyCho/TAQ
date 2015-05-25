@@ -1,0 +1,92 @@
+import time
+import csv
+import zipfile
+
+class Trade:
+    def __init__(self, aRow):
+        if aRawLine:
+            self.symbol = aRawLine[0:9]
+            self.date = aRawLine[9:10]
+            self. = aRawLine[10:26]
+            self.saleCondition = aRawLine[26:30]
+            self.tradeVolume = aRawLine[30:39]
+            self.valid = True
+        else:
+            self.valid = False
+
+class Breakdown:
+    def __init__(self, aSymbols):
+        myBreakdown = {}
+        for sym in aSymbols:
+            myBreakdown[sym] = {}
+            i=1
+        
+def inferTimeOfDay(aSaleConditionString):
+    myCodeDict = {"O":"Open", "Q":"Open", "M":"Close", "6":"Close",
+                  "T":"AfterHours", "U":"AfterHours"}
+    for code in myCodeDict.keys():
+        if code in aSaleConditionString:
+            return myCodeDict[code]
+        return "Regular"
+
+def printProgress(aIter, aTotal):
+    if aIter % 50000 == 0:
+        print("Finished %s of %s, %s%%" % (aIter, int(aTotal), round((aIter/aTotal) * 100, 2)))
+
+def updateBreakdownWithTrade(aBreakdown, aTrade):
+    mySymbol = aTrade.symbol.strip()
+    if mySymbol in aBreakdown.keys():
+        if aTrade.exchange not in aBreakdown[mySymbol].keys():
+            aBreakdown[mySymbol][aTrade.exchange] = {"Open":0, "Regular":0,"Close":0, "AfterHours":0}
+        myTimeOfDay = inferTimeOfDay(aTrade.saleCondition)
+        aBreakdown[mySymbol][aTrade.exchange][myTimeOfDay] += int(aTrade.tradeVolume)
+    return(aBreakdown)
+
+def writeBreakdownToCsv(aBreakdown, aFileName):
+    with open(aFileName, 'wt') as aFile:
+        myCsvWriter = csv.writer(aFile)
+        for mySymbol in aBreakdown.keys():
+            for myExchange in aBreakdown[mySymbol].keys():
+                for myTimeOfDay in aBreakdown[mySymbol][myExchange].keys():
+                    myVolume = aBreakdown[mySymbol][myExchange][myTimeOfDay]
+                    myCsvWriter.writerow([mySymbol, myExchange, myTimeOfDay, myVolume])
+
+def unzipFile(aFilePath):
+    print("Unzipping %s" % aFilePath)
+    myZipFile = zipfile.ZipFile(aFilePath, 'r')
+    myZipFile.extractall()
+    myZipFile.close()
+
+def createBreakdownForDate(aCsvFile, aSymbols):    
+    myConn = csv.reader(aCsvFile)
+    myRowCount = float(myConn.readline().split()[-1])
+    myBreakdown = {}
+    for sym in mySymbols:
+        myBreakdown[sym] = {}
+        i=1
+    myTrade = Trade(myConn.readline())
+    while myTrade.valid:
+        myBreakdown = updateBreakdownWithTrade(myBreakdown, myTrade)
+        printProgress(i, myRowCount)
+        i += 1
+        myTrade = Trade(myConn.readline())
+    myConn.close()
+    return(myBreakdown)
+
+if __name__ == '__main__':
+    mySymbols = ('GOOG', 'BAC')
+    myFileNameFolder = "C:\\Users\\eung.cho\\workspace\\TAQ\\data\\e3a6035dff51ab34_csv.zip"
+    myFileNames = ["e3a6035dff51ab34"]
+    
+    t = time.time()
+    for myFileName in myFileNames:
+        myFilePath = myFileNameFolder + myFileName
+        myDateBreakdown = createBreakdownForDate(myFilePath, mySymbols)
+    elapsed = time.time() - t
+    print("Time elapsed: %s seconds" % elapsed)
+    
+    myCsvFile = "C:\\Users\\eung.cho\\workspace\\TAQ\\data\\breakdown.csv"
+    writeBreakdownToCsv(myDateBreakdown, myCsvFile)
+
+
+BAC GOOG BRK GS SLV MNGA

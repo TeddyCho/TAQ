@@ -1,6 +1,7 @@
 import time
 import csv
 import zipfile
+import os
 
 class Trade:
     def __init__(self, aRow):
@@ -96,20 +97,16 @@ def updateBreakdown(aBreakdown, aCsvFile, aRowCount):
     return(aBreakdown)
 
 if __name__ == '__main__':
-    myFileNameFolder = "C:\\Users\\eung.cho\\workspace\\TAQ\\data\\"
+    os.chdir("..")
+    myFileNameFolder = os.getcwd() + "\\data\\"
     myFileName = "5aa0ce4b018e0067"
     
     myBreakdown = {}
-    
-    #myRowCount = countRows(myFileNameFolder + myFileName + ".csv")
-    myRowCount = 129048290
+    myRowCount = countRows(myFileNameFolder + myFileName + ".csv")
     t = time.time()
     myBreakdown = updateBreakdown(myBreakdown, myFileNameFolder + myFileName + ".csv", myRowCount)
     print("Time elapsed: %s seconds" % (time.time() - t))
-    print(myBreakdown)
-    print(myRowCount)
-    print("Time elapsed: %s seconds" % (time.time() - t))
     
-    myCsvFile = "C:\\Users\\eung.cho\\workspace\\TAQ\\data\\breakdown" + myFileName  + ".csv"
+    myCsvFile = os.getcwd() + "\\data\\breakdown" + myFileName  + ".csv"
     writeBreakdownToCsv(myBreakdown, myCsvFile)
     

@@ -4,7 +4,7 @@ library(knitr)
 library(base64enc)
 
 if(TRUE) {
-  aFileName<-"C:\\Users\\eung.cho\\workspace\\TAQ\\data\\breakdown5aa0ce4b018e0067.csv"
+  aFileName<- paste(getwd(), "\\data\\breakdown5aa0ce4b018e0067.csv", sep ="")
   myBreakdown <- read.csv(aFileName, header = TRUE)
   myBreakdown$Date = as.Date(sapply(myBreakdown$Date, toString),"%Y%m%d")
   myBreakdown$DaysSince = myBreakdown$Date - as.Date("2014-01-01")

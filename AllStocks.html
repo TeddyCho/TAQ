@@ -23,310 +23,92 @@
   </head>
   <body >
     
-    <div id = 'chart15c44a9c33ad' class = 'rChart nvd3'></div>    
+    <div id = 'chart17c018cc7a1b' class = 'rChart nvd3'></div>    
     <script type='text/javascript'>
  $(document).ready(function(){
-      drawchart15c44a9c33ad()
+      drawchart17c018cc7a1b()
     });
-    function drawchart15c44a9c33ad(){  
+    function drawchart17c018cc7a1b(){  
       var opts = {
- "dom": "chart15c44a9c33ad",
+ "dom": "chart17c018cc7a1b",
 "width":    800,
 "height":    400,
-"x": "Symbol",
-"y": "Proportion",
+"x": "Common",
+"y": "Volume",
 "group": "Exchange",
 "type": "multiBarChart",
-"id": "chart15c44a9c33ad" 
+"id": "chart17c018cc7a1b" 
 },
         data = [
  {
  "Exchange": "BATS",
-"Symbol": "CCF",
-"Volume":          43130,
-"Proportion": 0.04634908285127 
+"Volume":     2677324979,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "BATS Y",
-"Symbol": "CCF",
-"Volume":          60329,
-"Proportion": 0.06483176024424 
+"Volume":     1419907352,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "CBOE",
-"Symbol": "CCF",
-"Volume":          17930,
-"Proportion": 0.01926823685424 
+"Volume":       38740177,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "Chicago",
-"Symbol": "CCF",
-"Volume":              0,
-"Proportion":              0 
+"Volume":      240116014,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "Direct Edge A",
-"Symbol": "CCF",
-"Volume":          57369,
-"Proportion": 0.06165083547634 
+"Volume":     1431592980,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "Direct Edge X",
-"Symbol": "CCF",
-"Volume":         183080,
-"Proportion": 0.1967444954419 
+"Volume":     3457644458,
+"Common": "Aggregate" 
+},
+{
+ "Exchange": "NASDAQ",
+"Volume":     1396056128,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "NASDAQ OMX",
-"Symbol": "CCF",
-"Volume":         118908,
-"Proportion": 0.1277829061831 
+"Volume":     3830994390,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "NASDAQ OMX BX",
-"Symbol": "CCF",
-"Volume":          16226,
-"Proportion": 0.0174370558392 
+"Volume":     1542600466,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "NASDAQ OMX PSX",
-"Symbol": "CCF",
-"Volume":           3542,
-"Proportion": 0.003806363354027 
+"Volume":      215352909,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "National",
-"Symbol": "CCF",
-"Volume":          14878,
-"Proportion": 0.01598844550571 
+"Volume":      102979263,
+"Common": "Aggregate" 
+},
+{
+ "Exchange": "NYSE",
+"Volume":     7553778146,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "NYSE Arca SM",
-"Symbol": "CCF",
-"Volume":         206039,
-"Proportion": 0.2214170804914 
+"Volume":     3146350415,
+"Common": "Aggregate" 
 },
 {
  "Exchange": "NYSE MKT",
-"Symbol": "CCF",
-"Volume":         209116,
-"Proportion": 0.2247237377585 
-},
-{
- "Exchange": "BATS",
-"Symbol": "LIQT",
-"Volume":         512856,
-"Proportion": 0.04164193228972 
-},
-{
- "Exchange": "BATS Y",
-"Symbol": "LIQT",
-"Volume":         171800,
-"Proportion": 0.01394949843109 
-},
-{
- "Exchange": "CBOE",
-"Symbol": "LIQT",
-"Volume":              0,
-"Proportion":              0 
-},
-{
- "Exchange": "Chicago",
-"Symbol": "LIQT",
-"Volume":              0,
-"Proportion":              0 
-},
-{
- "Exchange": "Direct Edge A",
-"Symbol": "LIQT",
-"Volume":         153974,
-"Proportion": 0.0125020958756 
-},
-{
- "Exchange": "Direct Edge X",
-"Symbol": "LIQT",
-"Volume":        4219337,
-"Proportion": 0.3425939165409 
-},
-{
- "Exchange": "NASDAQ OMX",
-"Symbol": "LIQT",
-"Volume":        2150187,
-"Proportion": 0.1745869044415 
-},
-{
- "Exchange": "NASDAQ OMX BX",
-"Symbol": "LIQT",
-"Volume":          63247,
-"Proportion": 0.00513541284791 
-},
-{
- "Exchange": "NASDAQ OMX PSX",
-"Symbol": "LIQT",
-"Volume":           8419,
-"Proportion": 0.0006835903800426 
-},
-{
- "Exchange": "National",
-"Symbol": "LIQT",
-"Volume":          93025,
-"Proportion": 0.007553271778533 
-},
-{
- "Exchange": "NYSE Arca SM",
-"Symbol": "LIQT",
-"Volume":        2445457,
-"Proportion": 0.1985616914132 
-},
-{
- "Exchange": "NYSE MKT",
-"Symbol": "LIQT",
-"Volume":        2497553,
-"Proportion": 0.2027916860015 
-},
-{
- "Exchange": "BATS",
-"Symbol": "ONP",
-"Volume":          80421,
-"Proportion": 0.02296224724568 
-},
-{
- "Exchange": "BATS Y",
-"Symbol": "ONP",
-"Volume":          81712,
-"Proportion": 0.02333086068239 
-},
-{
- "Exchange": "CBOE",
-"Symbol": "ONP",
-"Volume":           2148,
-"Proportion": 0.0006133088009813 
-},
-{
- "Exchange": "Chicago",
-"Symbol": "ONP",
-"Volume":              0,
-"Proportion":              0 
-},
-{
- "Exchange": "Direct Edge A",
-"Symbol": "ONP",
-"Volume":          38725,
-"Proportion": 0.01105697547393 
-},
-{
- "Exchange": "Direct Edge X",
-"Symbol": "ONP",
-"Volume":        1477540,
-"Proportion": 0.4218753658296 
-},
-{
- "Exchange": "NASDAQ OMX",
-"Symbol": "ONP",
-"Volume":         488341,
-"Proportion": 0.1394338143296 
-},
-{
- "Exchange": "NASDAQ OMX BX",
-"Symbol": "ONP",
-"Volume":          26721,
-"Proportion": 0.007629527221146 
-},
-{
- "Exchange": "NASDAQ OMX PSX",
-"Symbol": "ONP",
-"Volume":           7658,
-"Proportion": 0.002186554375193 
-},
-{
- "Exchange": "National",
-"Symbol": "ONP",
-"Volume":          26191,
-"Proportion": 0.007478198699488 
-},
-{
- "Exchange": "NYSE Arca SM",
-"Symbol": "ONP",
-"Volume":         440201,
-"Proportion": 0.1256886161549 
-},
-{
- "Exchange": "NYSE MKT",
-"Symbol": "ONP",
-"Volume":         832656,
-"Proportion": 0.2377445311871 
-},
-{
- "Exchange": "BATS",
-"Symbol": "ONVO",
-"Volume":        8728617,
-"Proportion": 0.058045701734 
-},
-{
- "Exchange": "BATS Y",
-"Symbol": "ONVO",
-"Volume":        5181792,
-"Proportion": 0.03445915348097 
-},
-{
- "Exchange": "CBOE",
-"Symbol": "ONVO",
-"Volume":         353612,
-"Proportion": 0.002351535951407 
-},
-{
- "Exchange": "Chicago",
-"Symbol": "ONVO",
-"Volume":        1590130,
-"Proportion": 0.01057443712999 
-},
-{
- "Exchange": "Direct Edge A",
-"Symbol": "ONVO",
-"Volume":        5574639,
-"Proportion": 0.03707160397446 
-},
-{
- "Exchange": "Direct Edge X",
-"Symbol": "ONVO",
-"Volume":       47026659,
-"Proportion": 0.3127294303165 
-},
-{
- "Exchange": "NASDAQ OMX",
-"Symbol": "ONVO",
-"Volume":       29142205,
-"Proportion": 0.193796994335 
-},
-{
- "Exchange": "NASDAQ OMX BX",
-"Symbol": "ONVO",
-"Volume":        2656202,
-"Proportion": 0.01766386462337 
-},
-{
- "Exchange": "NASDAQ OMX PSX",
-"Symbol": "ONVO",
-"Volume":         252980,
-"Proportion": 0.00168232855499 
-},
-{
- "Exchange": "National",
-"Symbol": "ONVO",
-"Volume":        2799471,
-"Proportion": 0.01861661001726 
-},
-{
- "Exchange": "NYSE Arca SM",
-"Symbol": "ONVO",
-"Volume":       27621484,
-"Proportion": 0.1836841302253 
-},
-{
- "Exchange": "NYSE MKT",
-"Symbol": "ONVO",
-"Volume":       19447116,
-"Proportion": 0.1293242096569 
+"Volume":       47760648,
+"Common": "Aggregate" 
 } 
 ]
   
@@ -359,16 +141,17 @@
           
          
         chart
-  .reduceXTicks(false)
   .stacked(true)
           
-        chart.xAxis
-  .rotateLabels(    34)
+        
 
         
         
         chart.yAxis
+  .tickFormat(function(d) {return d/1000000000;})
+  .axisLabel("Volume, in billions")
   .showMaxMin(false)
+  .width(    40)
       
        d3.select("#" + opts.id)
         .append('svg')

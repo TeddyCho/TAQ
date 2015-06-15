@@ -6,6 +6,8 @@ library(reshape)
 library(base64enc)
 source("src/enrichTAQData.r")
 source("src/createTAQCharts.r")
+source("src/writeTablesToHTML.r")
+
 
 if(TRUE){
   myHomeExchanges = c("NASDAQ", "NYSE", "Arca", "NYSEMKT")
@@ -32,20 +34,20 @@ for(i in 1:length(myTODs)) {
                                                       c("NASDAQ", "NYSE", "NYSEMKT", "Arca"),
                                                       myTOD)
   myPerExchangeForTOD$plot$save(paste('perExchangeFor', myTOD, '.html', sep=""), standalone = TRUE)
-  print(xtable(myPerExchangeForTOD$propTable), type = "html")
+  dataFrameToFormatOutput(myPerExchangeForTOD$propTable)
   for(j in 1:length(myExchanges)) {
     myExchange = myExchanges[j]
     mySymbolsForExchange = mySymbolExchange$symbol[mySymbolExchange$exchange == myExchange]
     myPerSymbolForTOD <- createBySymbolForTOD(myBreakdown, mySymbolsForExchange, myTOD)
     myPerSymbolForTOD$plot$save(paste('', myExchange, 'SymbolsFor', myTOD, '.html', sep=""), standalone = TRUE)
-    print(xtable(myPerSymbolForTOD$propTable), type = "html")
+    dataFrameToFormatOutput(myPerSymbolForTOD$propTable)
   }
 }
 myPerExchangeForTOD <- createByListedExchangeForTOD(myBreakdown,
                                                     c("NASDAQ", "NYSE", "NYSEMKT", "Arca"),
                                                     c("Open", "Close"))
 myPerExchangeForTOD$plot$save(paste('perExchangeForOpenClose.html', sep=""), standalone = TRUE)
-print(xtable(myPerExchangeForTOD$propTable), type = "html")
+dataFrameToFormatOutput(myPerExchangeForTOD$propTable)
 for(i in 1:length(myHomeExchanges)) {
   myHomeExchange = myHomeExchanges[i]
   myHomeSymbols = mySymbolExchange$symbol[mySymbolExchange$exchange == myHomeExchange]

@@ -1,3 +1,4 @@
+library(reshape)
 createAggregateMultiBar <- function(aBreakdown, aTickSizeString, aTickSizeWord){
   myVolumesByExchange = aggregate(Volume ~ Exchange, data = aBreakdown, FUN= function(x) sum(as.numeric(x)))
   myVolumesByExchange$Common = sapply(myVolumesByExchange$Exchange, function(x) "Aggregate")
@@ -6,7 +7,8 @@ createAggregateMultiBar <- function(aBreakdown, aTickSizeString, aTickSizeWord){
            axisLabel = paste("Volume, in", aTickSizeWord), 
            showMaxMin = FALSE, width = 40)
   n1$chart(stacked = TRUE)
-  return(list("collapsed" = myVolumesByExchange, "plot" = n1))
+  myVolumesByExchange$Common = NULL
+  return(list("table" = myVolumesByExchange, "plot" = n1))
 }
 createByListedExchangeForTOD <- function(myBreakdown, myListedExchanges, aTODs){
   myBreakdownSimilar = myBreakdown[(myBreakdown$ListedExchange %in% myListedExchanges &
@@ -33,7 +35,9 @@ createByListedExchangeForTOD <- function(myBreakdown, myListedExchanges, aTODs){
   n1 <- nPlot(Proportion ~ ListedExchange, group = "Exchange", data = mySummary, type = "multiBarChart")
   n1$yAxis(showMaxMin = FALSE)
   n1$chart(stacked = TRUE)
-  n1
+  myPropTable <- cast(mySummary, Exchange ~ ListedExchange, sum, value='Proportion')
+  myVolumeTable <- cast(mySummary, Exchange ~ ListedExchange, sum, value='Volume')
+  return(list("volumeTable" = myVolumeTable, "propTable" = myPropTable, "plot" = n1))
 }
 createBySymbolForTOD <- function(myBreakdown, mySymbols, aTODs){
   myBreakdownSimilar = myBreakdown[(myBreakdown$Symbol %in% mySymbols & myBreakdown$TOD %in% aTODs),]
@@ -57,6 +61,9 @@ createBySymbolForTOD <- function(myBreakdown, mySymbols, aTODs){
   n1$xAxis(rotateLabels = 34)
   n1$chart(reduceXTicks = FALSE, stacked = TRUE)
   n1
+  myPropTable <- cast(mySummary, Exchange ~ Symbol, sum, value='Proportion')
+  myVolumeTable <- cast(mySummary, Exchange ~ Symbol, sum, value='Volume')
+  return(list("volumeTable" = myVolumeTable, "propTable" = myPropTable, "plot" = n1))
 }
 createByTODForSymbol <- function(myBreakdown, mySymbols, aTODs){
   myBreakdownSimilar = myBreakdown[(myBreakdown$Symbol %in% mySymbols & myBreakdown$TOD %in% aTODs),]
@@ -84,6 +91,9 @@ createByTODForSymbol <- function(myBreakdown, mySymbols, aTODs){
   n1$xAxis(rotateLabels = 34)
   n1$chart(reduceXTicks = FALSE, stacked = TRUE)
   n1
+  myPropTable <- cast(mySummary, Exchange ~ TOD, sum, value='Proportion')
+  myVolumeTable <- cast(mySummary, Exchange ~ TOD, sum, value='Volume')
+  return(list("volumeTable" = myVolumeTable, "propTable" = myPropTable, "plot" = n1))
 }
 graphExchangeShareByTOD <- function(aBreakdown, myTOD){
   myTODBreakdown = aBreakdown[aBreakdown$TOD == myTOD,]

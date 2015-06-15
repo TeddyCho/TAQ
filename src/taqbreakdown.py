@@ -1,17 +1,17 @@
 import time
+import datetime
 import csv
 import zipfile
 import os
 
 class Trade:
     def __init__(self, aRow):
+        self.dateTime = datetime.datetime.strptime(aRow["DATE"] + ' ' + aRow["TIME"], '%Y%m%d %H:%M:%S')
         self.symbol = aRow["SYMBOL"]
-        self.date = aRow["DATE"]
-        self.time = aRow["TIME"]
-        self.price = aRow["PRICE"]
-        self.tradeVolume = aRow["SIZE"]
+        # self.price = aRow["PRICE"]
+        self.tradeVolume = int(aRow["SIZE"])
         self.saleCondition = aRow["COND"]
-        self.ex = aRow["EX"]
+        self.exchange = inferExchange(aRow["EX"])
 
 class Breakdown:
     def __init__(self, aSymbols):
@@ -102,7 +102,8 @@ if __name__ == '__main__':
     myFileName = "5aa0ce4b018e0067"
     
     myBreakdown = {}
-    myRowCount = countRows(myFileNameFolder + myFileName + ".csv")
+    #myRowCount = countRows(myFileNameFolder + myFileName + ".csv")
+    myRowCount = 129048290
     t = time.time()
     myBreakdown = updateBreakdown(myBreakdown, myFileNameFolder + myFileName + ".csv", myRowCount)
     print("Time elapsed: %s seconds" % (time.time() - t))

@@ -28,12 +28,12 @@ def inferTimeOfDay(aSaleConditionString):
         return "Regular"  
 
 def inferExchange(aExchangeString):
-    myCodeDict = {"A":"NYSE MKT", "B":"NASDAQ OMX BX", "C":"National",
+    myCodeDict = {"A":"NYSE MKT", "B":"NASDAQ BX", "C":"National",
                   "D":"FINRA", "I":"ISE", "J":"Direct Edge A",
                   "K":"Direct Edge X", "M":"Chicago", "N":"NYSE",
-                  "T":"NASDAQ OMX", "P":"NYSE Arca SM", "S":"Consolidated Tape System",
-                  "T/Q":"NASDAQ", "Q":"NASDAQ", "W":"CBOE", "X":"NASDAQ OMX PSX",
-                  "Y":"BATS Y", "Z":"BATS"}
+                  "T":"NASDAQ", "P":"NYSE Arca SM", "S":"Consolidated Tape System",
+                  "T/Q":"NASDAQ", "Q":"NASDAQ", "W":"CBOE", "X":"NASDAQ PSX",
+                  "Y":"BATS Y", "Z":"BATS"} 
     try:
         return myCodeDict[aExchangeString]
     except:
@@ -80,7 +80,7 @@ def countRows(aCsvFile):
         myReader = csv.DictReader(f)
         t = time.time()
         print("Counting rows...")
-        theRowCount = sum(1 for row in myReader)
+        theRowCount = sum(1 for _ in myReader)
         print("Row Count: " + str(theRowCount))
         print("Time elapsed: %s seconds" % (time.time() - t))
         return(theRowCount)
@@ -97,17 +97,34 @@ def updateBreakdown(aBreakdown, aCsvFile, aRowCount):
     return(aBreakdown)
 
 if __name__ == '__main__':
-    os.chdir("..")
-    myFileNameFolder = os.getcwd() + "\\data\\"
+    myFileNameFolder = os.getcwd() + "\\..\\data\\"
     myFileName = "5aa0ce4b018e0067"
     
+    temp = list()
+    i=1
+    with open(myFileNameFolder + myFileName + ".csv", 'r') as f:
+        myReader = csv.DictReader(f)
+        for myTrade in myReader:
+            if myTrade["SYMBOL"] == "AMD" and time.strptime(myTrade["TIME"], "%H:%M:%S") > time.strptime("16:00:00", "%H:%M:%S"):
+                print(myTrade["SYMBOL"])
+                temp.append(myTrade)
+            if i%5000 == 0:
+                print(i/250000)
+            if i%250000==0:
+                break
+            i+=1
+    with open('temp.csv', 'w', newline = '') as output_file:
+        print(temp[0].keys())
+        dict_writer = csv.DictWriter(output_file, temp[0].keys())
+        dict_writer.writeheader()
+        dict_writer.writerows(temp)
+
     myBreakdown = {}
-    #myRowCount = countRows(myFileNameFolder + myFileName + ".csv")
-    myRowCount = 129048290
+    myRowCount = 129048290 # countRows(myFileNameFolder + myFileName + ".csv")
     t = time.time()
     myBreakdown = updateBreakdown(myBreakdown, myFileNameFolder + myFileName + ".csv", myRowCount)
     print("Time elapsed: %s seconds" % (time.time() - t))
     
-    myCsvFile = os.getcwd() + "\\data\\breakdown" + myFileName  + ".csv"
+    myCsvFile = os.getcwd() + "\\..\\data\\breakdown" + myFileName  + ".csv"
     writeBreakdownToCsv(myBreakdown, myCsvFile)
     

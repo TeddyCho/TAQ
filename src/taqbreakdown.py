@@ -100,6 +100,18 @@ if __name__ == '__main__':
     myFileNameFolder = os.getcwd() + "\\..\\data\\"
     myFileName = "5aa0ce4b018e0067"
     
+
+    myBreakdown = {}
+    myRowCount = 129048290 # countRows(myFileNameFolder + myFileName + ".csv")
+    t = time.time()
+    myBreakdown = updateBreakdown(myBreakdown, myFileNameFolder + myFileName + ".csv", myRowCount)
+    print("Time elapsed: %s seconds" % (time.time() - t))
+    
+    myCsvFile = os.getcwd() + "\\..\\data\\breakdown" + myFileName  + ".csv"
+    writeBreakdownToCsv(myBreakdown, myCsvFile)
+    
+    
+    """
     temp = list()
     i=1
     with open(myFileNameFolder + myFileName + ".csv", 'r') as f:
@@ -118,13 +130,4 @@ if __name__ == '__main__':
         dict_writer = csv.DictWriter(output_file, temp[0].keys())
         dict_writer.writeheader()
         dict_writer.writerows(temp)
-
-    myBreakdown = {}
-    myRowCount = 129048290 # countRows(myFileNameFolder + myFileName + ".csv")
-    t = time.time()
-    myBreakdown = updateBreakdown(myBreakdown, myFileNameFolder + myFileName + ".csv", myRowCount)
-    print("Time elapsed: %s seconds" % (time.time() - t))
-    
-    myCsvFile = os.getcwd() + "\\..\\data\\breakdown" + myFileName  + ".csv"
-    writeBreakdownToCsv(myBreakdown, myCsvFile)
-    
+        """

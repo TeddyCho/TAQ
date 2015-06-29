@@ -26,14 +26,14 @@ if(TRUE){
 myBreakdown = getTAQBreakdown("\\data\\breakdown5aa0ce4b018e0067.csv", mySymbolExchange)
 
 myResults <- createAggregateMultiBar(myBreakdown, "1000000000", "billions")
-myResults$plot$save('AllStocks.html', standalone = TRUE)
+myResults$plot$save('\\output\\breakdowncharts\\AllStocks.html', standalone = TRUE)
 
 for(i in 1:length(myTODs)) {
   myTOD = myTODs[i]
   myPerExchangeForTOD <- createByListedExchangeForTOD(myBreakdown,
                                                       c("NASDAQ", "NYSE", "NYSEMKT", "Arca"),
                                                       myTOD)
-  myPerExchangeForTOD$plot$save(paste('perExchangeFor', myTOD, '.html', sep=""), standalone = TRUE)
+  myPerExchangeForTOD$plot$save(paste('\\output\\breakdowncharts\\perExchangeFor', myTOD, '.html', sep=""), standalone = TRUE)
   dataFrameToFormatOutput(myPerExchangeForTOD$propTable)
   for(j in 1:length(myExchanges)) {
     myExchange = myExchanges[j]
@@ -46,13 +46,13 @@ for(i in 1:length(myTODs)) {
 myPerExchangeForTOD <- createByListedExchangeForTOD(myBreakdown,
                                                     c("NASDAQ", "NYSE", "NYSEMKT", "Arca"),
                                                     c("Open", "Close"))
-myPerExchangeForTOD$plot$save(paste('perExchangeForOpenClose.html', sep=""), standalone = TRUE)
+myPerExchangeForTOD$plot$save(paste('\\output\\breakdowncharts\\perExchangeForOpenClose.html', sep=""), standalone = TRUE)
 dataFrameToFormatOutput(myPerExchangeForTOD$propTable)
 for(i in 1:length(myHomeExchanges)) {
   myHomeExchange = myHomeExchanges[i]
   myHomeSymbols = mySymbolExchange$symbol[mySymbolExchange$exchange == myHomeExchange]
   myPerTODForSymbols <- createByTODForSymbol(myBreakdown, myHomeSymbols, myTODs)
-  myPerTODForSymbols$plot$save(paste('perTODFor', myHomeExchange, 'Symbols.html', sep=""), standalone = TRUE) 
+  myPerTODForSymbols$plot$save(paste('\\output\\breakdowncharts\\perTODFor', myHomeExchange, 'Symbols.html', sep=""), standalone = TRUE) 
 }
 
 if(TRUE){

@@ -28,12 +28,12 @@ def inferTimeOfDay(aSaleConditionString):
         return "Regular"  
 
 def inferExchange(aExchangeString):
-    myCodeDict = {"A":"NYSE MKT", "B":"NASDAQ BX", "C":"National",
-                  "D":"FINRA", "I":"ISE", "J":"Direct Edge A",
-                  "K":"Direct Edge X", "M":"Chicago", "N":"NYSE",
-                  "T":"NASDAQ", "P":"NYSE Arca SM", "S":"Consolidated Tape System",
-                  "T/Q":"NASDAQ", "Q":"NASDAQ", "W":"CBOE", "X":"NASDAQ PSX",
-                  "Y":"BATS Y", "Z":"BATS"} 
+    myCodeDict = {"A":"NYSE MKT", "B":"NASDAQ BX", "C":"NSX",
+                  "D":"FINRA", "I":"ISE", "J":"BATS EDGA",
+                  "K":"BATS EDGX", "M":"CHX", "N":"NYSE",
+                  "T":"NASDAQ", "P":"NYSE Arca", "S":"Consolidated Tape System",
+                  "T/Q":"NASDAQ", "Q":"NASDAQ", "W":"CBSX", "X":"NASDAQ PSX",
+                  "Y":"BATS BYX", "Z":"BATS BZX"} 
     try:
         return myCodeDict[aExchangeString]
     except:
@@ -99,7 +99,6 @@ def updateBreakdown(aBreakdown, aCsvFile, aRowCount):
 if __name__ == '__main__':
     myFileNameFolder = os.getcwd() + "\\..\\data\\"
     myFileName = "5aa0ce4b018e0067"
-    
 
     myBreakdown = {}
     myRowCount = 129048290 # countRows(myFileNameFolder + myFileName + ".csv")

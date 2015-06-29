@@ -33,20 +33,20 @@ for(i in 1:length(myTODs)) {
   myPerExchangeForTOD <- createByListedExchangeForTOD(myBreakdown,
                                                       c("NASDAQ", "NYSE", "NYSEMKT", "Arca"),
                                                       myTOD)
-  myPerExchangeForTOD$plot$save(paste('\\output\\breakdowncharts\\perExchangeFor', myTOD, '.html', sep=""), standalone = TRUE)
+  myPerExchangeForTOD$plot$save(paste(getwd(), '\\output\\breakdowncharts\\perExchangeFor', myTOD, '.html', sep=""), standalone = TRUE)
   dataFrameToFormatOutput(myPerExchangeForTOD$propTable)
   for(j in 1:length(myExchanges)) {
     myExchange = myExchanges[j]
     mySymbolsForExchange = mySymbolExchange$symbol[mySymbolExchange$exchange == myExchange]
     myPerSymbolForTOD <- createBySymbolForTOD(myBreakdown, mySymbolsForExchange, myTOD)
-    myPerSymbolForTOD$plot$save(paste('', myExchange, 'SymbolsFor', myTOD, '.html', sep=""), standalone = TRUE)
+    myPerSymbolForTOD$plot$save(paste(getwd(), '\\output\\breakdowncharts\\', myExchange, 'SymbolsFor', myTOD, '.html', sep=""), standalone = TRUE)
     dataFrameToFormatOutput(myPerSymbolForTOD$propTable)
   }
 }
 myPerExchangeForTOD <- createByListedExchangeForTOD(myBreakdown,
                                                     c("NASDAQ", "NYSE", "NYSEMKT", "Arca"),
                                                     c("Open", "Close"))
-myPerExchangeForTOD$plot$save(paste('\\output\\breakdowncharts\\perExchangeForOpenClose.html', sep=""), standalone = TRUE)
+myPerExchangeForTOD$plot$save(paste(getwd(), '\\output\\breakdowncharts\\perExchangeForOpenClose.html', sep=""), standalone = TRUE)
 dataFrameToFormatOutput(myPerExchangeForTOD$propTable)
 for(i in 1:length(myHomeExchanges)) {
   myHomeExchange = myHomeExchanges[i]

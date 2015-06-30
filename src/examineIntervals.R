@@ -31,12 +31,10 @@ mySeries <- read.csv(aFileName, header = TRUE, stringsAsFactors = FALSE)
 myIsNormalHours <- mySeries$startTime > as.POSIXct("2014-03-13 09:00:00") & 
   mySeries$endTime < as.POSIXct("2014-03-13 14:00:00")
 myFilteredSeries <- mySeries[myIsNormalHours,]
-myExchangeColumns <- c("NASDAQ.BX", "BATS.Y", "Direct.Edge.A",
-                       "National", "CBOE", "NASDAQ.PSX", "Chicago",
-                       "Direct.Edge.X", "NYSE.Arca.SM", "BATS", "NYSE", "NASDAQ")
-myExchangeColumns <- c("NASDAQ.BX", "BATS.Y", "Direct.Edge.A",
-                       "National", "CBOE", "NASDAQ.PSX", "Chicago",
-                       "Direct.Edge.X", "NYSE.Arca.SM", "BATS", "NASDAQ")
+myExchangeColumns <- c("NASDAQ.BX", "BATS.BYX", "BATS.EDGA",
+                       "NSX", "CBSX", "NASDAQ.PSX", "CHX",
+                       "BATS.EDGX", "NYSE.Arca", "BATS.BZX", "NYSE", "NASDAQ")
+myExchangeColumns <- myExchangeColumns[!(myExchangeColumns %in% c("NYSE", "CBSX"))]
 for(i in 1:dim(myFilteredSeries)[1]){
   name <- rename(i)
   png(paste(getwd(), name, sep=""))
@@ -66,14 +64,18 @@ corrplot(M, method = "number", bg = "white")
 
 
 myExch = 'NASDAQ'
-plot(myFilteredSeries[,myExch])
-hist(myFilteredSeries[,myExch], breaks=100)
-myIsZero = myFilteredSeries[,myExch] == 0
-myIsOne = myFilteredSeries[,myExch] == 1
+myTimeSeries = myFilteredSeries[,myExch]
+myVolumes = myFilteredSeries[,"totalVolume"]
+myTimeSeries = myTimeSeries * myVolumes
+plot(myTimeSeries)
+hist(myTimeSeries, breaks=100)
+myIsZero = myTimeSeries == 0
+myIsOne = myTimeSeries == 1
 myIsBigger = myFilteredSeries$totalVolume > 5000
-plot(myFilteredSeries[,myExch][!myIsZero & !myIsOne & myIsBigger])
-acf(myFilteredSeries[,myExch], na.action = na.pass)
-acf(myFilteredSeries[,myExch][!myIsZero], na.action = na.pass)
-acf(myFilteredSeries[,myExch][myIsBigger], na.action = na.pass)
-acf(myFilteredSeries[,myExch][!myIsOne], na.action = na.pass)
-acf(myFilteredSeries[,myExch][!myIsZero & !myIsOne], na.action = na.pass)
+plot(myTimeSeries[!myIsZero & !myIsOne & myIsBigger])
+acf(myTimeSeries, na.action = na.pass)
+acf(myTimeSeries[!myIsZero], na.action = na.pass)
+acf(myTimeSeries[myIsBigger], na.action = na.pass)
+acf(myTimeSeries[!myIsOne], na.action = na.pass)
+acf(myTimeSeries[!myIsZero & !myIsOne], na.action = na.pass)
+

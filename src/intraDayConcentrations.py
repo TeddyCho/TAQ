@@ -77,8 +77,8 @@ def writeExchangeBreakdownPerInterval(aBreakdownPerInterval, aFileName):
 if __name__ == "__main__":
     myFileNameFolder = os.path.join(os.getcwd(), "..\\data\\")
     myFileName = "f9036944a8673301"
-    mySymbol = "GOOG"
-    myTimeInterval = datetime.timedelta(seconds=60)
+    mySymbol = "BAC"
+    myTimeInterval = datetime.timedelta(seconds=5)
     
     print("reading in trades")
     myTradeList = getTradeList(myFileNameFolder + myFileName + '.csv', mySymbol, datetime.date(2014,3,13))

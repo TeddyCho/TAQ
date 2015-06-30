@@ -26,7 +26,7 @@ if(TRUE){
 myBreakdown = getTAQBreakdown("\\data\\breakdown5aa0ce4b018e0067.csv", mySymbolExchange)
 
 myResults <- createAggregateMultiBar(myBreakdown, "1000000000", "billions")
-myResults$plot$save('\\output\\breakdowncharts\\AllStocks.html', standalone = TRUE)
+myResults$plot$save(paste(getwd(),'\\output\\breakdowncharts\\AllStocks.html', sep=""), standalone = TRUE)
 
 for(i in 1:length(myTODs)) {
   myTOD = myTODs[i]

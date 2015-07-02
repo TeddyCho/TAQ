@@ -2,20 +2,21 @@ import datetime
 import csv
 import time
 import os
+import itertools
 import taqbreakdown
 
-def getTradeList(aFileName, aSymbol, aDate):
+def getTradeList(aFileName, aSymbol, aDates):
     theTradesForDate = list()
     i=1
     with open(aFileName, 'r') as f:
         myReader = csv.DictReader(f)
         for myRow in myReader:
             myTrade = taqbreakdown.Trade(myRow)
-            if myTrade.dateTime.date() == aDate and myTrade.symbol == aSymbol and \
+            if myTrade.dateTime.date() in aDates and myTrade.symbol == aSymbol and \
             myTrade.dateTime.time() > datetime.time(9,30,0) and myTrade.dateTime.time() < datetime.time(16,0,0):
                 theTradesForDate.append(myTrade)
             if i%10000 == 0:
-                print(i / 776352)
+                print(myTrade.dateTime)
             i += 1
     return(theTradesForDate)
 def summarizeVolumeByExchange(myTrades, aExchanges):
@@ -23,6 +24,8 @@ def summarizeVolumeByExchange(myTrades, aExchanges):
     for myTrade in myTrades:
         theExchangeVolumeSummary[myTrade.exchange] += myTrade.tradeVolume
     return(theExchangeVolumeSummary)
+    # theExchangeVolumeSummary = dict(zip(aExchanges, myExchangeVolumes))
+    # return(theExchangeVolumeSummary)
 def perdelta(aStartTime, aEndTime, aDelta):
     curr = aStartTime
     while curr < aEndTime:
@@ -31,7 +34,7 @@ def perdelta(aStartTime, aEndTime, aDelta):
 def getTradesPerInterval(aTradeList, aExchanges, aTimeInterval):
     myStartTime = min([x.dateTime for x in aTradeList])
     myEndTime = max([x.dateTime for x in aTradeList])
-    myIntervalCount = sum(1 for _ in (perdelta(myStartTime, myEndTime, aTimeInterval)))
+    """myIntervalCount = sum(1 for _ in (perdelta(myStartTime, myEndTime, aTimeInterval)))
     i = 1
     theTradesPerInterval = list()
     for intervalStart in perdelta(myStartTime, myEndTime, aTimeInterval):
@@ -41,6 +44,11 @@ def getTradesPerInterval(aTradeList, aExchanges, aTimeInterval):
         myIntervalTrades = [t for t in aTradeList if intervalStart <= t.dateTime and t.dateTime < intervalEnd]
         theTradesPerInterval.append({"startTime": intervalStart, "endTime": intervalEnd, "trades": myIntervalTrades})
         i+=1
+    return(theTradesPerInterval)"""
+
+    get_key = lambda x: int((x.dateTime - myStartTime) / aTimeInterval)
+    theTradesPerInterval = [{"startTime":myStartTime + interv * aTimeInterval, "endTime":myStartTime + (interv+1) * aTimeInterval, "trades": list(d)} 
+                            for interv, d in itertools.groupby(aTradeList, get_key)]
     return(theTradesPerInterval)
 def getExchangeVolumeDict(aTrades, aStartTime, aEndTime, aExchanges):
     myTimeRangeDict = {"startTime":aStartTime, "endTime":aEndTime}
@@ -76,12 +84,14 @@ def writeExchangeBreakdownPerInterval(aBreakdownPerInterval, aFileName):
             myCsvWriter.writerow(myRow)
 if __name__ == "__main__":
     myFileNameFolder = os.path.join(os.getcwd(), "..\\data\\")
-    myFileName = "f9036944a8673301"
+    myFileName = "BACGOOGOneWeek"
     mySymbol = "BAC"
-    myTimeInterval = datetime.timedelta(seconds=5)
+    myTimeInterval = datetime.timedelta(seconds=60)
+    myDates = [datetime.date(2014,3,3), datetime.date(2014,3,4), datetime.date(2014,3,5), datetime.date(2014,3,6), datetime.date(2014,3,7)]
+    #myDates = [datetime.date(2014,3,13)]
     
     print("reading in trades")
-    myTradeList = getTradeList(myFileNameFolder + myFileName + '.csv', mySymbol, datetime.date(2014,3,13))
+    myTradeList = getTradeList(myFileNameFolder + myFileName + '.csv', mySymbol, myDates)
     myFilteredTradeList = [x for x in myTradeList if x.exchange != "FINRA"]
     myExchanges = set(x.exchange for x in myFilteredTradeList)
     
@@ -92,5 +102,6 @@ if __name__ == "__main__":
     print("converting to proportions")
     myExchangeProportionsPerInterval = getExchangeProportionsPerInterval(myExchangeVolumesPerInterval)
     
-    myCsvFile = os.path.join(os.getcwd(), "..\\output\\timeIntervals\\") + "exchangeProps" + str(myTimeInterval.seconds) + mySymbol + ".csv"
+    myCsvFile = os.path.join(os.getcwd(), "..\\output\\timeIntervals\\") + "exchangePropsOneWeek" + str(myTimeInterval.seconds) + mySymbol + ".csv"
     writeExchangeBreakdownPerInterval(myExchangeProportionsPerInterval, myCsvFile)
+    print(myCsvFile)

@@ -103,6 +103,8 @@ if __name__ == '__main__':
     myBreakdown = {}
     myRowCount = 129048290 # countRows(myFileNameFolder + myFileName + ".csv")
     t = time.time()
+    
+    
     myBreakdown = updateBreakdown(myBreakdown, myFileNameFolder + myFileName + ".csv", myRowCount)
     print("Time elapsed: %s seconds" % (time.time() - t))
     
@@ -129,4 +131,5 @@ if __name__ == '__main__':
         dict_writer = csv.DictWriter(output_file, temp[0].keys())
         dict_writer.writeheader()
         dict_writer.writerows(temp)
+        
         """

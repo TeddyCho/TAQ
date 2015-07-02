@@ -35,7 +35,7 @@ correlationBetweenExchanges <- function(aSeries){
   col1 <- colorRampPalette(c("#7F0000",
                              "red", "White", "blue",
                              "#00007F"))
-  png(filename = paste(getwd(), "/output/correlationMatrix.png", sep=""))
+  png(filename = paste(getwd(), "/output/correlationMatrix", myInterval, ".png", sep=""))
   corrplot(M, method = "number", bg = "white", col = col1(100))
   dev.off()
 }
@@ -50,7 +50,7 @@ filterSeries <- function(aSeries){
 }
 
 mySymbol = "BAC"
-myInterval = 5
+myInterval = 30
 aFileName<- paste(getwd(), "\\output\\timeIntervals\\exchangePropsOneWeek",myInterval, mySymbol, ".csv", sep ="")
 mySeries <- read.csv(aFileName, header = TRUE, stringsAsFactors = FALSE)
 myFilteredSeries <- filterSeries(mySeries)
@@ -82,6 +82,7 @@ my_command <- paste(myConvertPath, " *.png -delay 3 -loop 0 animation", mySymbol
 system(my_command)
 unlink('*.png')
 setwd(paste(getwd(), "/../../", sep=""))
+
 "plotPropVsVolume <- function(aProps, aExchange) {
   myDF <- data.frame(proportion = aProps[,aExchange],
                      tradeCount = aProps$TradeCount,

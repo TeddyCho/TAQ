@@ -12,8 +12,8 @@ rename <- function(x){
     return(name <- paste(myPath, '0', i,'plot.png', sep=''))
   }
 }
-autocorrOfShares <- function(myExch){
-  myProps = myFilteredSeries[,myExch]
+autocorrOfShares <- function(aExchange, aTitle="None"){
+  myProps = myFilteredSeries[, aExchange]
   myVolumes = myFilteredSeries[,"totalVolume"]
   #myTimeSeries = myProps * myVolumes
   myTimeSeries = myProps
@@ -23,8 +23,12 @@ autocorrOfShares <- function(myExch){
   #plot(myTimeSeries[myIsBigger])
   #acf(myTimeSeries, na.action = na.pass, 30)
   myACF = acf(myTimeSeries[myIsBigger], na.action = na.pass,30)
-  plot(myACF, main = paste(myExch, "'s ", mySymbol, " Volume Share Autocorrelation", sep=""),
+  png(filename = paste(getwd(), "/output/correlation/acf", mySymbol, myInterval, aExchange, ".png", sep=""))
+  plot(myACF,
+       main = paste(aExchange, "'s ", mySymbol,
+                    " Volume Share Autocorrelation", sep=""),
        ylab = "Correlation", xlab = paste(myInterval, "Second Lags"))
+  dev.off()
 }
 correlationBetweenExchanges <- function(aSeries){
   #aSeries=myFilteredSeries
@@ -35,7 +39,7 @@ correlationBetweenExchanges <- function(aSeries){
   col1 <- colorRampPalette(c("#7F0000",
                              "red", "White", "blue",
                              "#00007F"))
-  png(filename = paste(getwd(), "/output/correlationMatrix", myInterval, ".png", sep=""))
+  png(filename = paste(getwd(), "/output/correlation/correlationMatrix", mySymbol, myInterval, ".png", sep=""))
   corrplot(M, method = "number", bg = "white", col = col1(100))
   dev.off()
 }
@@ -49,8 +53,9 @@ filterSeries <- function(aSeries){
   
 }
 
+
 mySymbol = "BAC"
-myInterval = 30
+myInterval = 1
 aFileName<- paste(getwd(), "\\output\\timeIntervals\\exchangePropsOneWeek",myInterval, mySymbol, ".csv", sep ="")
 mySeries <- read.csv(aFileName, header = TRUE, stringsAsFactors = FALSE)
 myFilteredSeries <- filterSeries(mySeries)
@@ -59,13 +64,25 @@ myExchangeColumns <- c("NSX", "CBSX", "NASDAQ.PSX", "CHX",
                        "BATS.BYX", "BATS.EDGA", "NASDAQ.BX",
                        "NYSE", "NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")
 #myExchangeColumns <- myExchangeColumns[!(myExchangeColumns %in% c("NYSE", "CBSX"))]
+#myProps = myFilteredSeries[, myExchanges]
+#if(length(myExchanges) > 1){
+#  myProps <- rowSums(myProps)
+#}
 
 correlationBetweenExchanges(myFilteredSeries)
+myTakerMakerExchanges <- c("BATS.BYX", "BATS.EDGA", "NASDAQ.BX")
+myMakerTakerExchanges <- c("NYSE", "NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")
 
-autocorrOfShares("NYSE")
+for(i in 1:length(myExchangeColumns)){
+  autocorrOfShares(myExchangeColumns[i])
+}
 
+autocorrOfShares(myTakerMakerExchanges, "Taker/Maker Group")
+autocorrOfShares(myMakerTakerExchanges, "Maker/Taker Group")
+autocorrOfShares(c("NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ"), "Maker/Taker Group")
 
-for(i in 1:300){#dim(myFilteredSeries)[1]){
+myFrameCount = min(dim(myFilteredSeries)[1], 300)
+for(i in 1:myFrameCount){#dim(myFilteredSeries)[1]){
   name <- rename(i)
   png(paste(getwd(), name, sep=""))
   myEndTime <- myFilteredSeries[i, 'endTime']
@@ -73,7 +90,7 @@ for(i in 1:300){#dim(myFilteredSeries)[1]){
   myExchangeProps[is.na(myExchangeProps)] = 0
   barplot(myExchangeProps, names.arg = myExchangeColumns, las=2, ylim=c(0,1), main = myEndTime)
   dev.off()
-  print(i/dim(myFilteredSeries)[1])
+  print(i/myFrameCount)
 }
 myConvertPath = '"C:\\Program Files\\ImageMagick-6.9.1-Q16\\convert.exe"'
 myPNGPath = paste(getwd(), "/output/anims/*.png", sep="")

@@ -12,34 +12,25 @@ rename <- function(x){
     return(name <- paste(myPath, '0', i,'plot.png', sep=''))
   }
 }
-autocorrOfShares <- function(aExchange, aTitle="None"){
-  myProps = myFilteredSeries[, aExchange]
-  myVolumes = myFilteredSeries[,"totalVolume"]
-  #myTimeSeries = myProps * myVolumes
-  myTimeSeries = myProps
-  #plot(myTimeSeries)
-  #hist(myVolumes, breaks=100)
-  myIsBigger = myVolumes > 1000
-  #plot(myTimeSeries[myIsBigger])
-  #acf(myTimeSeries, na.action = na.pass, 30)
-  myACF = acf(myTimeSeries[myIsBigger], na.action = na.pass,30)
-  png(filename = paste(getwd(), "/output/correlation/acf", mySymbol, myInterval, aExchange, ".png", sep=""))
+autocorrOfShares <- function(aTimeSeries, aSymbol, aExchange, aTimeInterval){
+  myACF = acf(aTimeSeries, na.action = na.pass,30)
+  png(filename = paste(myOutputFolder, "acf", aExchange, ".png", sep=""))
   plot(myACF,
-       main = paste(aExchange, "'s ", mySymbol,
+       main = paste(aExchange, "'s ", aSymbol,
                     " Volume Share Autocorrelation", sep=""),
-       ylab = "Correlation", xlab = paste(myInterval, "Second Lags"))
+       ylab = "Correlation", xlab = paste(aTimeInterval, "Second Lags"))
   dev.off()
 }
 correlationBetweenExchanges <- function(aSeries){
   #aSeries=myFilteredSeries
   #aSeries[is.na(aSeries)] = 0
   aSeries=aSeries[aSeries$totalVolume > 100,]
-  M <- cor(aSeries[,myExchangeColumns])
+  M <- cor(aSeries[, myExchangeColumns])
   M[is.na(M)]=0
   col1 <- colorRampPalette(c("#7F0000",
                              "red", "White", "blue",
                              "#00007F"))
-  png(filename = paste(getwd(), "/output/correlation/correlationMatrix", mySymbol, myInterval, ".png", sep=""))
+  png(filename = paste(myOutputFolder, "/correlationMatrix.png", sep=""))
   corrplot(M, method = "number", bg = "white", col = col1(100))
   dev.off()
 }
@@ -49,37 +40,50 @@ filterSeries <- function(aSeries){
   myStartTimeOfDay = as.POSIXct(strftime(aSeries$startTime, format="%H:%M:%S"), format="%H:%M:%S")
   myEndTimeOfDay = as.POSIXct(strftime(aSeries$endTime, format="%H:%M:%S"), format="%H:%M:%S")
   myIsNormalHours <- myStartTimeOfDay > myStartTime & myEndTimeOfDay < myEndTime
-  myFilteredSeries <- aSeries[myIsNormalHours,]
-  
+  myIsBigger = aSeries[,"totalVolume"] > 1000
+  myFilteredSeries <- aSeries[myIsNormalHours & myIsBigger,]
 }
 
-
-mySymbol = "BAC"
+mySymbol = "GOOG"
 myInterval = 1
-aFileName<- paste(getwd(), "\\output\\timeIntervals\\exchangePropsOneWeek",myInterval, mySymbol, ".csv", sep ="")
-mySeries <- read.csv(aFileName, header = TRUE, stringsAsFactors = FALSE)
+myOutputFolder <- paste(getwd(), "/output/correlation/", mySymbol, "/", 
+                        myInterval, "Seconds/", sep="")
+dir.create(myOutputFolder, showWarnings=FALSE, recursive=TRUE)
+
+mySeries <- read.csv(paste(getwd(), "\\output\\timeIntervals\\exchangePropsOneWeek",
+                           myInterval, mySymbol, ".csv", sep =""),
+                     header = TRUE, stringsAsFactors = FALSE)
 myFilteredSeries <- filterSeries(mySeries)
-
-myExchangeColumns <- c("NSX", "CBSX", "NASDAQ.PSX", "CHX",
-                       "BATS.BYX", "BATS.EDGA", "NASDAQ.BX",
-                       "NYSE", "NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")
-#myExchangeColumns <- myExchangeColumns[!(myExchangeColumns %in% c("NYSE", "CBSX"))]
-#myProps = myFilteredSeries[, myExchanges]
-#if(length(myExchanges) > 1){
-#  myProps <- rowSums(myProps)
-#}
-
-correlationBetweenExchanges(myFilteredSeries)
-myTakerMakerExchanges <- c("BATS.BYX", "BATS.EDGA", "NASDAQ.BX")
-myMakerTakerExchanges <- c("NYSE", "NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")
-
-for(i in 1:length(myExchangeColumns)){
-  autocorrOfShares(myExchangeColumns[i])
+if(TRUE){
+  myExchangeColumns <- c("NSX", "CBSX", "NASDAQ.PSX", "CHX",
+                         "BATS.BYX", "BATS.EDGA", "NASDAQ.BX",
+                         "NYSE", "NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")
+  myTakerMakerExchanges <- c("BATS.BYX", "BATS.EDGA", "NASDAQ.BX")
+  myMakerTakerExchanges <- c("NYSE", "NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")
+  myNonNYSEMakerTakerExchanges <- c("NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")                                            
+  myNonExchangeColumns <- c("startTime", "endTime", "totalVolume")
 }
+if(mySymbol == "GOOG"){
+  myExchangeColumns <- myExchangeColumns[myExchangeColumns != "NYSE"]
+  myMakerTakerExchanges <- myMakerTakerExchanges[myMakerTakerExchanges != "NYSE"]
+}
+correlationBetweenExchanges(myFilteredSeries)
+for(i in 1:length(myExchangeColumns)){
+  myExchange <- myExchangeColumns[i]
+  autocorrOfShares(mySeries[,myExchange], mySymbol, myExchange, myInterval)
+}
+autocorrOfShares(rowSums(mySeries[,myTakerMakerExchanges]), mySymbol, "TakerMaker", myInterval)
+autocorrOfShares(rowSums(mySeries[,myMakerTakerExchanges]), mySymbol, "MakerTaker", myInterval)
+autocorrOfShares(rowSums(mySeries[,myNonNYSEMakerTakerExchanges]),
+                 mySymbol, "NonNYSEMakerTaker", myInterval)
 
-autocorrOfShares(myTakerMakerExchanges, "Taker/Maker Group")
-autocorrOfShares(myMakerTakerExchanges, "Maker/Taker Group")
-autocorrOfShares(c("NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ"), "Maker/Taker Group")
+
+#myVolumes = myFilteredSeries[,"totalVolume"]
+#myTimeSeries = myProps * myVolumes
+#hist(myVolumes, breaks=100)
+
+
+
 
 myFrameCount = min(dim(myFilteredSeries)[1], 300)
 for(i in 1:myFrameCount){#dim(myFilteredSeries)[1]){

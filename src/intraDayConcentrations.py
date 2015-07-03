@@ -85,8 +85,8 @@ def writeExchangeBreakdownPerInterval(aBreakdownPerInterval, aFileName):
 if __name__ == "__main__":
     myFileNameFolder = os.path.join(os.getcwd(), "..\\data\\")
     myFileName = "BACGOOGOneWeek"
-    mySymbol = "BAC"
-    myTimeInterval = datetime.timedelta(seconds=30)
+    mySymbol = "GOOG"
+    myTimeInterval = datetime.timedelta(seconds=5)
     myDates = [datetime.date(2014,3,3), datetime.date(2014,3,4), datetime.date(2014,3,5), datetime.date(2014,3,6), datetime.date(2014,3,7)]
     #myDates = [datetime.date(2014,3,13)]
     

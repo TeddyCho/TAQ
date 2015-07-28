@@ -14,7 +14,7 @@ rename <- function(x){
 }
 autocorrOfShares <- function(aTimeSeries, aSymbol, aExchange, aTimeInterval, aSuffix){
   myACF = acf(aTimeSeries, na.action = na.pass, 30)
-  png(filename = paste(myOutputFolder, "acf", aExchange, aSuffix,  ".png", sep=""))
+  png(filename = paste(myOutputFolder, "acf", aExchange,  ".png", sep=""))
   plot(myACF,
        main = paste(aExchange, "'s ", aSymbol,
                     " Volume Share Autocorrelation", sep=""),

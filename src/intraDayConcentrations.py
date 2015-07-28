@@ -34,7 +34,27 @@ def addInEmptyIntervals(theTradesPerInterval, myStartDateTime, myPopulatedInterv
                            "trades": list()}
         theTradesPerInterval.append(myIntervalEntry)
     return(theTradesPerInterval)
-def getIntervaledTrades(aTrades, aDateString, aTimeInterval, myStartTime, myEndTime):
+def getIntervaledTrades(aTrades, aDateString, myStartTime, myEndTime, aIntervalStyle, aInterval):
+    if aIntervalStyle == "clock":
+        theIntervaledTrades = getClockIntervaledTrades(aTrades, aDateString, aInterval, myStartTime, myEndTime)
+    elif aIntervalStyle == "business":
+        theIntervaledTrades = getBusinessIntervaledTrades(aTrades, aDateString, aInterval, myStartTime, myEndTime)
+    else:
+        raise ValueError("interval style was not 'clock' or 'business'")
+    return(theIntervaledTrades)
+def getBusinessIntervaledTrades(aTrades, aDateString, aInterval, myStartTime, myEndTime):
+    myDate = datetime.datetime.strptime(aDateString, "%d%m%Y")
+    myStartDateTime = datetime.datetime.combine(myDate, myStartTime)
+    myEndDateTime = datetime.datetime.combine(myDate, myEndTime)
+    
+    myPartitionedTrades = [aTrades[n:n+aInterval-1] for n in range(0, len(aTrades), aInterval)]
+
+    myIntervaledTrades = [{"startTime": min([x.dateTime for x in trades]), "endTime": max([x.dateTime for x in trades]), 
+                            "trades": trades} for trades in myPartitionedTrades]
+    
+    theTradesPerInterval = [x for x in myIntervaledTrades if (x["startTime"] >= myStartDateTime and x["endTime"] <= myEndDateTime)]
+    return(theTradesPerInterval)
+def getClockIntervaledTrades(aTrades, aDateString, aTimeInterval, myStartTime, myEndTime):
     myDate = datetime.datetime.strptime(aDateString, "%d%m%Y")
     myStartDateTime = datetime.datetime.combine(myDate, myStartTime)
     myEndDateTime = datetime.datetime.combine(myDate, myEndTime)
@@ -81,34 +101,56 @@ def writeExchangeBreakdownPerInterval(aBreakdownPerInterval, aFileName):
         for aBreakdown in aBreakdownPerInterval:
             myRow = list(aBreakdown.values())
             myCsvWriter.writerow(myRow)
+def computeExchangeProportionsPerInterval(aTrades, aDateString, myStartTime, myEndTime, myExchanges, 
+                                          aIntervalStyle, aInterval):
+    print("grouping trades by interval")
+    myIntervaledTrades = getIntervaledTrades(aTrades, aDateString, myStartTime, myEndTime, aIntervalStyle, aInterval)
+    print("summarizing exchange volumes")
+    myExchangeVolumesPerInterval = getExchangeVolumesPerInterval(myIntervaledTrades, myExchanges)
+    print("converting to proportions")
+    theExchangeProportionsPerInterval = getExchangeProportionsPerInterval(myExchangeVolumesPerInterval)
+    return(theExchangeProportionsPerInterval)
+def computePerDateExchangeProportionsPerInterval(myPerDateTradeList, myStartTime, myEndTime, myExchanges,
+                                                 aIntervalStyle, myInterval):
+    myPerDateExchangeProportionsPerInterval = dict()
+    for dateString, trades in myPerDateTradeList.items():
+        myExchPropsPerInterval = computeExchangeProportionsPerInterval(trades, dateString, myStartTime, myEndTime,
+                                                                       myExchanges, aIntervalStyle, myInterval)
+        myPerDateExchangeProportionsPerInterval[dateString] = myExchPropsPerInterval
+    print("sorting")
+    myExchangeProportionsPerInterval = [line for dateList in myPerDateExchangeProportionsPerInterval.values() for line in dateList]
+    myExchangeProportionsPerInterval = sorted(myExchangeProportionsPerInterval, key=lambda k: k['startTime']) 
+    return(myExchangeProportionsPerInterval)
 if __name__ == "__main__":
-    myFileNameFolder = os.path.join(os.getcwd(), "..\\data\\")
     myFileName = "BACGOOGOneWeek"
     mySymbol = "BAC"
-    myTimeIntervals = [1, 10, 120, 1800, 3600, 10800, 19800]
     myStartTime = datetime.time(10,0,0)
     myEndTime = datetime.time(15,30,0)
-    
-    myDates = [datetime.date(2014,3,3), datetime.date(2014,3,4), datetime.date(2014,3,5), \
+    myDates = [datetime.date(2014,3,3), datetime.date(2014,3,4), datetime.date(2014,3,5),
                datetime.date(2014,3,6), datetime.date(2014,3,7)]
-    #myDates = [datetime.date(2014,3,3)]
+    
+    myIntervalStyle = "business"
+    myBusinessIntervals = [10, 50, 100]
+    myTimeIntervals = [1, 10, 120, 1800, 3600, 10800, 19800]
+    
     print("reading in trades")
-    myPerDateTradeList = getPerDateTradeList(myFileNameFolder + myFileName + '.csv', mySymbol, myDates, myStartTime, myEndTime)
+    myPerDateTradeList = getPerDateTradeList(os.path.join(os.getcwd(), "..\\data\\") + myFileName + '.csv', mySymbol, 
+                                             myDates, myStartTime, myEndTime)
     myExchanges = set(x.exchange for t in myPerDateTradeList.values() for x in t)
-    for i in myTimeIntervals:
-        myTimeInterval = datetime.timedelta(seconds=i)
-        myPerDateExchangeProportionsPerInterval = dict()
-        for dateString, trades in myPerDateTradeList.items():
-            print("grouping trades by interval")
-            myIntervaledTrades = getIntervaledTrades(trades, dateString, myTimeInterval, myStartTime, myEndTime)
-            print("summarizing exchange volumes")
-            myExchangeVolumesPerInterval = getExchangeVolumesPerInterval(myIntervaledTrades, myExchanges)
-            print("converting to proportions")
-            myPerDateExchangeProportionsPerInterval[dateString] = getExchangeProportionsPerInterval(myExchangeVolumesPerInterval)
-        print("sorting")
-        myExchangeProportionsPerInterval = [line for dateList in myPerDateExchangeProportionsPerInterval.values() for line in dateList]
-        myExchangeProportionsPerInterval = sorted(myExchangeProportionsPerInterval, key=lambda k: k['startTime']) 
-        
-        myCsvFile = os.path.join(os.getcwd(), "..\\output\\timeIntervals\\") + "exchangePropsOneWeek" + str(myTimeInterval.seconds) + mySymbol + ".csv"
-        writeExchangeBreakdownPerInterval(myExchangeProportionsPerInterval, myCsvFile)
-        print(myCsvFile)
+    
+    if myIntervalStyle == "business":
+        for i in myBusinessIntervals:
+            myPerDateExchPropsPerInterv = computePerDateExchangeProportionsPerInterval(myPerDateTradeList, myStartTime, myEndTime, 
+                                                                                       myExchanges, myIntervalStyle, i)
+            myCsvFile = os.path.join(os.getcwd(), "..\\output\\") + myIntervalStyle + "Intervals\\" + "exchangePropsOneWeek" + str(i) +  mySymbol + ".csv"
+            writeExchangeBreakdownPerInterval(myPerDateExchPropsPerInterv, myCsvFile)
+            print(myCsvFile)
+    elif myIntervalStyle == "clock":
+        for i in myTimeIntervals:
+            myTimeInterval = datetime.timedelta(seconds=i)
+            myPerDateExchPropsPerInterv = computePerDateExchangeProportionsPerInterval(myPerDateTradeList,
+                                                                                       myStartTime, myEndTime, myExchanges, 
+                                                                                       myIntervalStyle, myTimeInterval) 
+            myCsvFile = os.path.join(os.getcwd(), "..\\output\\") +myIntervalStyle + "Intervals\\" + "exchangePropsOneWeek" + str(myTimeInterval.seconds) + mySymbol + ".csv"
+            writeExchangeBreakdownPerInterval(myPerDateExchPropsPerInterv, myCsvFile)
+            print(myCsvFile)

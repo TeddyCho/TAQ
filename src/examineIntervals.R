@@ -67,14 +67,15 @@ createShareGIF <- function(myFilteredSeries, myExchangeColumns){
   setwd(paste(getwd(), "/../../", sep=""))
 }
 mySymbol = "BAC"
-myTimeIntervals = c(1)
+setwd(paste(getwd(), "/Github/TAQ/", sep=""))
+myTimeIntervals = c(10,50,100)
 for(j in 1:length(myTimeIntervals)){
   myInterval = myTimeIntervals[j]
   myOutputFolder <- paste(getwd(), "/output/correlation/", mySymbol, "/", 
-                          myInterval, "Seconds/", sep="")
+                          myInterval, "Business/", sep="")
   dir.create(myOutputFolder, showWarnings=FALSE, recursive=TRUE)
   
-  mySeries <- read.csv(paste(getwd(), "\\output\\timeIntervals\\exchangePropsOneWeek",
+  mySeries <- read.csv(paste(getwd(), "\\output\\businessIntervals\\exchangePropsOneWeek",
                              myInterval, mySymbol, ".csv", sep =""),
                        header = TRUE, stringsAsFactors = FALSE)
   myFilteredSeries <- filterSeries(mySeries)
@@ -98,7 +99,7 @@ for(j in 1:length(myTimeIntervals)){
   correlationBetweenExchanges(myFilteredSeries)
   for(i in 1:length(myExchangeColumns)){
     myExchange <- myExchangeColumns[i]
-    autocorrOfShares(mySeries[,myExchange], mySymbol, myExchange, myInterval, "ClockTime")
+    autocorrOfShares(mySeries[,myExchange], mySymbol, myExchange, myInterval, "BusinessTime")
   }
   autocorrOfShares(rowSums(mySeries[,myTakerMakerExchanges]), mySymbol,
                    "TakerMaker", myInterval, "ClockTime")

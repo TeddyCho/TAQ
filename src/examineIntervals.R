@@ -18,7 +18,7 @@ autocorrOfShares <- function(aTimeSeries, aSymbol, aExchange, aTimeInterval, aSu
   plot(myACF,
        main = paste(aExchange, "'s ", aSymbol,
                     " Volume Share Autocorrelation", sep=""),
-       ylab = "Correlation", xlab = paste(aTimeInterval, "Second Lags"))
+       ylab = "Correlation", xlab = paste(aTimeInterval, aSuffix, "Lags"))
   dev.off()
 }
 correlationBetweenExchanges <- function(aSeries,aIntervalType){
@@ -80,6 +80,20 @@ for(j in 1:length(myTimeIntervals)){
                        header = TRUE, stringsAsFactors = FALSE)
   myFilteredSeries <- filterSeries(mySeries)
   
+  myDay = strptime(c("2014-03-05 10:00:00"),"%Y-%m-%d")
+  myDaySeries = myFilteredSeries[strptime(myFilteredSeries$endTime, "%Y-%m-%d") == myDay,]
+  c=as.numeric(strptime(myDaySeries$endTime, "%Y-%m-%d %H:%M:%S") - 
+                 strptime(myDaySeries$startTime, "%Y-%m-%d %H:%M:%S"), units="secs")
+  hist(c)
+  mav <- function(x,n=5){filter(x,rep(1/n,n), sides=2)}
+  myMovingWindow = 1000
+  m=mav(c, myMovingWindow)
+  plot(strptime(myDaySeries$startTime, "%Y-%m-%d %H:%M:%S"), m, type = "l",
+       xlab = "Time", 
+       ylab = paste("Seconds per Interval", sep=""),
+       main = paste(myInterval, "-Trade Intervals on ",myDay, "\n",
+                    myMovingWindow, " Interval MA", sep=""))
+  
   if(TRUE){
     myExchangeColumns <- c("NSX", "CBSX", "NASDAQ.PSX", "CHX",
                            "BATS.BYX", "BATS.EDGA", "NASDAQ.BX",
@@ -102,11 +116,11 @@ for(j in 1:length(myTimeIntervals)){
     autocorrOfShares(mySeries[,myExchange], mySymbol, myExchange, myInterval, "BusinessTime")
   }
   autocorrOfShares(rowSums(mySeries[,myTakerMakerExchanges]), mySymbol,
-                   "TakerMaker", myInterval, "ClockTime")
+                   "TakerMaker", myInterval, "Trade")
   autocorrOfShares(rowSums(mySeries[,myMakerTakerExchanges]), mySymbol,
-                   "MakerTaker", myInterval, "ClockTime")
+                   "MakerTaker", myInterval, "Trade")
   autocorrOfShares(rowSums(mySeries[,myNonNYSEMakerTakerExchanges]),
-                   mySymbol, "NonNYSEMakerTaker", myInterval, "ClockTime")
+                   mySymbol, "NonNYSEMakerTaker", myInterval, "Trade")
 
 }
 #myVolumes = myFilteredSeries[,"totalVolume"]

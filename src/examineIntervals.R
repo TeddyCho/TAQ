@@ -21,7 +21,7 @@ autocorrOfShares <- function(aTimeSeries, aSymbol, aExchange, aTimeInterval, aSu
        ylab = "Correlation", xlab = paste(aTimeInterval, "Second Lags"))
   dev.off()
 }
-correlationBetweenExchanges <- function(aSeries){
+correlationBetweenExchanges <- function(aSeries,aIntervalType){
   #aSeries=myFilteredSeries
   #aSeries[is.na(aSeries)] = 0
   aSeries=aSeries[aSeries$totalVolume > 100,]
@@ -33,7 +33,7 @@ correlationBetweenExchanges <- function(aSeries){
   png(filename = paste(myOutputFolder, "/correlationMatrix.png", sep=""))
   par(oma=c(0,0,2,0))
   corrplot(M, method = "number", bg = "white", col = col1(100))
-  title(outer=TRUE,adj=0,main = paste("  ", mySymbol, myInterval, "Second Intervals")) 
+  title(outer=TRUE,adj=0,main = paste("  ", mySymbol, myInterval, aIntervalType, " Intervals")) 
   dev.off()
 }
 filterSeries <- function(aSeries){
@@ -68,7 +68,7 @@ createShareGIF <- function(myFilteredSeries, myExchangeColumns){
 }
 mySymbol = "BAC"
 setwd(paste(getwd(), "/Github/TAQ/", sep=""))
-myTimeIntervals = c(10,50,100)
+myTimeIntervals = c(10,50,100,1000,10000, 50000)
 for(j in 1:length(myTimeIntervals)){
   myInterval = myTimeIntervals[j]
   myOutputFolder <- paste(getwd(), "/output/correlation/", mySymbol, "/", 
@@ -96,7 +96,7 @@ for(j in 1:length(myTimeIntervals)){
   
   createShareGIF(myFilteredSeries, myExchangeColumns)
   
-  correlationBetweenExchanges(myFilteredSeries)
+  correlationBetweenExchanges(myFilteredSeries, "Trade")
   for(i in 1:length(myExchangeColumns)){
     myExchange <- myExchangeColumns[i]
     autocorrOfShares(mySeries[,myExchange], mySymbol, myExchange, myInterval, "BusinessTime")

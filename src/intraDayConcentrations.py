@@ -130,7 +130,8 @@ if __name__ == "__main__":
                datetime.date(2014,3,6), datetime.date(2014,3,7)]
     
     myIntervalStyle = "business"
-    myBusinessIntervals = [10, 50, 100]
+    myBusinessIntervals = [10, 50, 100, 1000, 10000]
+    myBusinessIntervals = [50000]
     myTimeIntervals = [1, 10, 120, 1800, 3600, 10800, 19800]
     
     print("reading in trades")

@@ -66,7 +66,7 @@ createShareGIF <- function(myFilteredSeries, myExchangeColumns){
   unlink('*.png')
   setwd(paste(getwd(), "/../../", sep=""))
 }
-mySymbol = "BAC"
+mySymbol = "GOOG"
 setwd(paste(getwd(), "/Github/TAQ/", sep=""))
 myTimeIntervals = c(10,50,100,1000,10000, 50000)
 for(j in 1:length(myTimeIntervals)){
@@ -80,19 +80,22 @@ for(j in 1:length(myTimeIntervals)){
                        header = TRUE, stringsAsFactors = FALSE)
   myFilteredSeries <- filterSeries(mySeries)
   
-  myDay = strptime(c("2014-03-05 10:00:00"),"%Y-%m-%d")
+  myDay = strptime(c("2014-03-05 10:00:00"),"%Y-%m-%d", tz="")
   myDaySeries = myFilteredSeries[strptime(myFilteredSeries$endTime, "%Y-%m-%d") == myDay,]
   c=as.numeric(strptime(myDaySeries$endTime, "%Y-%m-%d %H:%M:%S") - 
                  strptime(myDaySeries$startTime, "%Y-%m-%d %H:%M:%S"), units="secs")
   hist(c)
   mav <- function(x,n=5){filter(x,rep(1/n,n), sides=2)}
-  myMovingWindow = 1000
+  myMovingWindow = floor(length(c) / 10)
   m=mav(c, myMovingWindow)
+  png(filename = paste(getwd(), "/output/businessIntervalLengths/", strftime(myDay),
+                       "-", myInterval, "-", myMovingWindow, mySymbol, ".png", sep=""))
   plot(strptime(myDaySeries$startTime, "%Y-%m-%d %H:%M:%S"), m, type = "l",
        xlab = "Time", 
        ylab = paste("Seconds per Interval", sep=""),
        main = paste(myInterval, "-Trade Intervals on ",myDay, "\n",
                     myMovingWindow, " Interval MA", sep=""))
+  dev.off()
   
   if(TRUE){
     myExchangeColumns <- c("NSX", "CBSX", "NASDAQ.PSX", "CHX",

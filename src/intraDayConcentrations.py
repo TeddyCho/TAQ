@@ -123,15 +123,14 @@ def computePerDateExchangeProportionsPerInterval(myPerDateTradeList, myStartTime
     return(myExchangeProportionsPerInterval)
 if __name__ == "__main__":
     myFileName = "BACGOOGOneWeek"
-    mySymbol = "BAC"
+    mySymbol = "GOOG"
     myStartTime = datetime.time(10,0,0)
     myEndTime = datetime.time(15,30,0)
     myDates = [datetime.date(2014,3,3), datetime.date(2014,3,4), datetime.date(2014,3,5),
                datetime.date(2014,3,6), datetime.date(2014,3,7)]
     
     myIntervalStyle = "business"
-    myBusinessIntervals = [10, 50, 100, 1000, 10000]
-    myBusinessIntervals = [50000]
+    myBusinessIntervals = [10, 50, 100, 1000, 10000, 50000 ]
     myTimeIntervals = [1, 10, 120, 1800, 3600, 10800, 19800]
     
     print("reading in trades")

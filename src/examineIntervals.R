@@ -68,7 +68,7 @@ createShareGIF <- function(myFilteredSeries, myExchangeColumns){
 }
 mySymbol = "GOOG"
 setwd(paste(getwd(), "/Github/TAQ/", sep=""))
-myTimeIntervals = c(10,50,100,1000,10000, 50000)
+myTimeIntervals = c(1, 10, 120, 1800, 3600, 10800, 19800)
 for(j in 1:length(myTimeIntervals)){
   myInterval = myTimeIntervals[j]
   myOutputFolder <- paste(getwd(), "/output/correlation/", mySymbol, "/", 

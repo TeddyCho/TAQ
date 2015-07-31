@@ -1,5 +1,6 @@
 import datetime
 import csv
+import math
 import time
 import os
 import itertools
@@ -86,21 +87,32 @@ def getExchangeProportions(aExchangeVolumes):
             aExchangeVolumes[exchange] = float('NaN')
         else:
             aExchangeVolumes[exchange] = volume / myTotalVolume
+    aExchangeVolumes["isEmpty"] = 1 if myTotalVolume == 0 else 0
     aExchangeVolumes["startTime"] = myStartTime
     aExchangeVolumes["endTime"] = myEndTime
     aExchangeVolumes["totalVolume"] = myTotalVolume
     return(aExchangeVolumes)
 def getExchangeProportionsPerInterval(aExchangeVolumesPerInterval):
     theExchangeProportionsPerInterval = [getExchangeProportions(t) for t in aExchangeVolumesPerInterval]
+    theExchangeProportionsPerInterval = sorted(theExchangeProportionsPerInterval, key=lambda k: k['startTime'])
+    if myEmptyBehavior == "Persist":
+        myLastRow = next(t for t in theExchangeProportionsPerInterval if t["isEmpty"]==0)
+        for i in range(len(theExchangeProportionsPerInterval)):
+            if theExchangeProportionsPerInterval[i]["isEmpty"]:
+                myOriginalRow = dict(theExchangeProportionsPerInterval[i])
+                theExchangeProportionsPerInterval[i] = dict(myLastRow)
+                theExchangeProportionsPerInterval[i]["isEmpty"] = 1
+                theExchangeProportionsPerInterval[i]["startTime"] = myOriginalRow["startTime"]
+                theExchangeProportionsPerInterval[i]["endTime"] = myOriginalRow["endTime"]
+            else:
+                myLastRow = dict(theExchangeProportionsPerInterval[i])
     return(theExchangeProportionsPerInterval)
 def writeExchangeBreakdownPerInterval(aBreakdownPerInterval, aFileName):
+    keys = aBreakdownPerInterval[0].keys()
     with open(aFileName, 'wt') as aFile:
-        myCsvWriter = csv.writer(aFile)
-        myColNames = list(aBreakdownPerInterval[0].keys())
-        myCsvWriter.writerow(myColNames)
-        for aBreakdown in aBreakdownPerInterval:
-            myRow = list(aBreakdown.values())
-            myCsvWriter.writerow(myRow)
+        dict_writer = csv.DictWriter(aFile, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(aBreakdownPerInterval)
 def computeExchangeProportionsPerInterval(aTrades, aDateString, myStartTime, myEndTime, myExchanges, 
                                           aIntervalStyle, aInterval):
     print("grouping trades by interval")
@@ -110,7 +122,20 @@ def computeExchangeProportionsPerInterval(aTrades, aDateString, myStartTime, myE
     print("converting to proportions")
     theExchangeProportionsPerInterval = getExchangeProportionsPerInterval(myExchangeVolumesPerInterval)
     return(theExchangeProportionsPerInterval)
-def computePerDateExchangeProportionsPerInterval(myPerDateTradeList, myStartTime, myEndTime, myExchanges,
+def getAverageProportion(myExchangeProportionsPerInterval, exch):
+    myProportions = [interval[exch] for interval in myExchangeProportionsPerInterval if not math.isnan(interval[exch])]
+    theAverageProportion = sum(myProportions) / float(len(myProportions))
+    return(theAverageProportion)
+def transformProportionsToScores(myExchangeProportionsPerInterval):
+    myAvgPropsPerExchange = dict()
+    for exch in myExchanges:
+        myAvgPropsPerExchange[exch] = getAverageProportion(myExchangeProportionsPerInterval, exch)
+    for i in range(len(myExchangeProportionsPerInterval)):
+        for exch, avgProp in myAvgPropsPerExchange.items():
+            myProportion = myExchangeProportionsPerInterval[i][exch]
+            myExchangeProportionsPerInterval[i][exch] = (myProportion - avgProp) / avgProp
+    return(myExchangeProportionsPerInterval)
+def computeTotalExchangeProportionsPerInterval(myPerDateTradeList, myStartTime, myEndTime, myExchanges,
                                                  aIntervalStyle, myInterval):
     myPerDateExchangeProportionsPerInterval = dict()
     for dateString, trades in myPerDateTradeList.items():
@@ -119,18 +144,22 @@ def computePerDateExchangeProportionsPerInterval(myPerDateTradeList, myStartTime
         myPerDateExchangeProportionsPerInterval[dateString] = myExchPropsPerInterval
     print("sorting")
     myExchangeProportionsPerInterval = [line for dateList in myPerDateExchangeProportionsPerInterval.values() for line in dateList]
-    myExchangeProportionsPerInterval = sorted(myExchangeProportionsPerInterval, key=lambda k: k['startTime']) 
-    return(myExchangeProportionsPerInterval)
+    myExchangeProportionsPerInterval = sorted(myExchangeProportionsPerInterval, key=lambda k: k['startTime'])
+    
+    print("transforming to scores")
+    theScoresPerInterval = transformProportionsToScores(myExchangeProportionsPerInterval)
+    
+    return(theScoresPerInterval)
 if __name__ == "__main__":
     myFileName = "BACGOOGOneWeek"
-    mySymbol = "GOOG"
+    mySymbol = "BAC"
     myStartTime = datetime.time(10,0,0)
     myEndTime = datetime.time(15,30,0)
     myDates = [datetime.date(2014,3,3), datetime.date(2014,3,4), datetime.date(2014,3,5),
                datetime.date(2014,3,6), datetime.date(2014,3,7)]
-    
-    myIntervalStyle = "business"
-    myBusinessIntervals = [10, 50, 100, 1000, 10000, 50000 ]
+    myDates = [datetime.date(2014,3,3)]
+    myIntervalStyle = "clock"
+    myEmptyBehavior = "NaN"
     myTimeIntervals = [1, 10, 120, 1800, 3600, 10800, 19800]
     
     print("reading in trades")
@@ -138,19 +167,14 @@ if __name__ == "__main__":
                                              myDates, myStartTime, myEndTime)
     myExchanges = set(x.exchange for t in myPerDateTradeList.values() for x in t)
     
-    if myIntervalStyle == "business":
-        for i in myBusinessIntervals:
-            myPerDateExchPropsPerInterv = computePerDateExchangeProportionsPerInterval(myPerDateTradeList, myStartTime, myEndTime, 
-                                                                                       myExchanges, myIntervalStyle, i)
-            myCsvFile = os.path.join(os.getcwd(), "..\\output\\") + myIntervalStyle + "Intervals\\" + "exchangePropsOneWeek" + str(i) +  mySymbol + ".csv"
-            writeExchangeBreakdownPerInterval(myPerDateExchPropsPerInterv, myCsvFile)
-            print(myCsvFile)
-    elif myIntervalStyle == "clock":
-        for i in myTimeIntervals:
-            myTimeInterval = datetime.timedelta(seconds=i)
-            myPerDateExchPropsPerInterv = computePerDateExchangeProportionsPerInterval(myPerDateTradeList,
-                                                                                       myStartTime, myEndTime, myExchanges, 
-                                                                                       myIntervalStyle, myTimeInterval) 
-            myCsvFile = os.path.join(os.getcwd(), "..\\output\\") +myIntervalStyle + "Intervals\\" + "exchangePropsOneWeek" + str(myTimeInterval.seconds) + mySymbol + ".csv"
-            writeExchangeBreakdownPerInterval(myPerDateExchPropsPerInterv, myCsvFile)
-            print(myCsvFile)
+    for i in myTimeIntervals:
+        myTimeInterval = datetime.timedelta(seconds=i)
+        myPerDateExchPropsPerInterv = computeTotalExchangeProportionsPerInterval(myPerDateTradeList,
+                                                                                 myStartTime, myEndTime, myExchanges, 
+                                                                                 myIntervalStyle, myTimeInterval) 
+        
+        
+        
+        writeExchangeBreakdownPerInterval(myPerDateExchPropsPerInterv, os.path.join(os.getcwd(), "..\\output\\") + 
+                                          myIntervalStyle + "Intervals\\" + 
+                                          "oneWeek" + myEmptyBehavior + str(myTimeInterval.seconds) + mySymbol + ".csv")

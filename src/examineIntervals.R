@@ -1,7 +1,7 @@
 library(corrplot)
 
 rename <- function(x){
-  myPath = myOutputFolder
+  myPath = "/output/anims/"
   if (x < 10) {
     return(name <- paste(myPath, '000',x,'plot.png',sep=''))
   }
@@ -59,22 +59,22 @@ createShareGIF <- function(myFilteredSeries, myExchangeColumns){
   myFrameCount = min(dim(myFilteredSeries)[1], 200)
   for(i in 1:myFrameCount){#dim(myFilteredSeries)[1]){
     name <- rename(i)
-    png(paste(name, sep=""))
+    png(paste(getwd(), name, sep=""))
     myEndTime <- myFilteredSeries[i, 'endTime']
     myExchangeProps= as.numeric(myFilteredSeries[i, myExchangeColumns])
     myExchangeProps[is.na(myExchangeProps)] = 0
-    barplot(myExchangeProps, names.arg = myExchangeColumns, las=2, ylim=c(-2,10),
+    barplot(myExchangeProps, names.arg = myExchangeColumns, las=2, ylim=c(-2,20),
             main = myEndTime)
     dev.off()
     print(i/myFrameCount)
   }
   myConvertPath = '"C:\\Program Files\\ImageMagick-6.9.1-Q16\\convert.exe"'
-  myPNGPath = paste(myOutputFolder, "*.png", sep="")
-  setwd(paste(myOutputFolder, sep=""))
-  my_command <- paste(myConvertPath, " *.png -delay 3 -loop 0 animation", ".gif", sep="")
+  myPNGPath = paste(getwd(), "/output/anims/*.png", sep="")
+  setwd(paste(getwd(), "/output/anims/", sep=""))
+  my_command <- paste(myConvertPath, " *.png -delay 3 -loop 0 animation", mySymbol, myInterval, ".gif", sep="")
   system(my_command)
   unlink('*.png')
-  setwd(paste(getwd(), "/../../../../", sep=""))
+  setwd(paste(getwd(), "/../../", sep=""))
 }
 mySymbol = "BAC"
 setwd(paste(getwd(), "/Github/TAQ/", sep=""))

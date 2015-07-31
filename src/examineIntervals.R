@@ -91,7 +91,7 @@ for(j in 1:length(myTimeIntervals)){
                        header = TRUE, stringsAsFactors = FALSE)
   
   myEmptyIntervalCount = sum(mySeries$isEmpty)
-  myEmptyIntervalRate = myEmptyIntervalCount / dim(mySeries)
+  myEmptyIntervalRate = myEmptyIntervalCount / dim(mySeries)[1]
   
   myDescription = paste(round(100*myEmptyIntervalRate,2), "% of intervals were empty. (",
                         myEmptyIntervalCount, " intervals)",

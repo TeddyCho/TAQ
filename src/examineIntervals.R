@@ -71,7 +71,7 @@ createShareGIF <- function(myFilteredSeries, myExchangeColumns){
   myConvertPath = '"C:\\Program Files\\ImageMagick-6.9.1-Q16\\convert.exe"'
   myPNGPath = paste(myOutputFolder, "*.png", sep="")
   setwd(paste(myOutputFolder, sep=""))
-  my_command <- paste(myConvertPath, " *.png -delay 3 -loop 0 animation", mySymbol, myInterval, ".gif", sep="")
+  my_command <- paste(myConvertPath, " *.png -delay 3 -loop 0 animation", ".gif", sep="")
   system(my_command)
   unlink('*.png')
   setwd(paste(getwd(), "/../../../../", sep=""))

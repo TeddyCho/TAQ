@@ -79,7 +79,7 @@ createShareGIF <- function(myFilteredSeries, myExchangeColumns){
 mySymbol = "BAC"
 setwd(paste(getwd(), "/Github/TAQ/", sep=""))
 myTimeIntervals = c(1, 10, 120, 1800, 3600, 10800, 19800)
-myEmptyBehavior = "NaN" #"NaN"
+myEmptyBehavior = "Persist" #"NaN"
 for(j in 1:length(myTimeIntervals)){
   myInterval = myTimeIntervals[j]
   myOutputFolder <- paste(getwd(), "/output/correlation/", mySymbol, "/", 

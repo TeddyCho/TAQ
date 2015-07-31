@@ -160,6 +160,7 @@ if __name__ == "__main__":
     myIntervalStyle = "clock"
     myEmptyBehavior = "NaN"
     myTimeIntervals = [1, 10, 120, 1800, 3600, 10800, 19800]
+    myTimeIntervals = [30]
     
     print("reading in trades")
     myPerDateTradeList = getPerDateTradeList(os.path.join(os.getcwd(), "..\\data\\") + myFileName + '.csv', mySymbol, 

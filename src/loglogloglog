@@ -1,0 +1,62 @@
+12:45:54,82 root INFO Partitioning Trades
+12:45:55,471 AMD INFO For 2 days, reading data takes 0:00:01.388969
+12:45:58,293 AMD INFO For 2 days, clock-ThrowOut takes 0:00:02.821005
+12:46:01,317 AMD INFO For 2 days, clock-NaN takes 0:00:03.024146
+12:46:01,647 AMD INFO For 2 days, business-NaN takes 0:00:00.330253
+12:46:12,394 BAC INFO For 2 days, reading data takes 0:00:10.746610
+12:46:18,808 BAC INFO For 2 days, clock-ThrowOut takes 0:00:06.414552
+12:46:25,814 BAC INFO For 2 days, clock-NaN takes 0:00:07.005971
+12:46:27,617 BAC INFO For 2 days, business-NaN takes 0:00:01.803282
+12:46:27,648 BRKA INFO For 2 days, reading data takes 0:00:00.031022
+12:46:28,761 BRKA INFO For 2 days, clock-ThrowOut takes 0:00:01.112787
+12:46:29,743 BRKA INFO For 2 days, clock-NaN takes 0:00:00.980698
+12:46:29,768 BRKA INFO For 2 days, business-NaN takes 0:00:00.025017
+12:46:30,760 BRKB INFO For 2 days, reading data takes 0:00:00.990702
+12:46:33,996 BRKB INFO For 2 days, clock-ThrowOut takes 0:00:03.236295
+12:46:47,410 root INFO Partitioning Trades
+12:46:47,418 AMD INFO For 1 days, reading data takes 0:00:00.006990
+12:46:54,216 root INFO Partitioning Trades
+12:46:55,624 AMD INFO For 2 days, reading data takes 0:00:01.408017
+12:46:58,417 AMD INFO For 2 days, clock-ThrowOut takes 0:00:02.792966
+12:47:01,291 AMD INFO For 2 days, clock-NaN takes 0:00:02.874040
+12:47:01,586 AMD INFO For 2 days, business-NaN takes 0:00:00.293224
+12:47:12,311 BAC INFO For 2 days, reading data takes 0:00:10.724610
+12:47:18,927 BAC INFO For 2 days, clock-ThrowOut takes 0:00:06.616697
+12:47:25,674 BAC INFO For 2 days, clock-NaN takes 0:00:06.746788
+12:47:27,480 BAC INFO For 2 days, business-NaN takes 0:00:01.805280
+12:47:27,511 BRKA INFO For 2 days, reading data takes 0:00:00.030022
+12:47:28,581 BRKA INFO For 2 days, clock-ThrowOut takes 0:00:01.070760
+12:47:29,562 BRKA INFO For 2 days, clock-NaN takes 0:00:00.979693
+12:47:29,581 BRKA INFO For 2 days, business-NaN takes 0:00:00.019013
+12:47:30,609 BRKB INFO For 2 days, reading data takes 0:00:01.027728
+12:47:33,858 BRKB INFO For 2 days, clock-ThrowOut takes 0:00:03.248307
+12:47:37,190 BRKB INFO For 2 days, clock-NaN takes 0:00:03.332369
+12:47:37,469 BRKB INFO For 2 days, business-NaN takes 0:00:00.277196
+12:47:41,521 C INFO For 2 days, reading data takes 0:00:04.052876
+12:47:45,901 C INFO For 2 days, clock-ThrowOut takes 0:00:04.378109
+12:47:50,171 C INFO For 2 days, clock-NaN takes 0:00:04.269029
+12:47:51,10 C INFO For 2 days, business-NaN takes 0:00:00.839596
+12:47:52,269 GOOG INFO For 2 days, reading data takes 0:00:01.258911
+12:47:55,386 GOOG INFO For 2 days, clock-ThrowOut takes 0:00:03.117195
+12:47:58,344 GOOG INFO For 2 days, clock-NaN takes 0:00:02.958126
+12:47:58,648 GOOG INFO For 2 days, business-NaN takes 0:00:00.303231
+12:48:00,656 GRPN INFO For 2 days, reading data takes 0:00:02.008408
+12:48:03,860 GRPN INFO For 2 days, clock-ThrowOut takes 0:00:03.204274
+12:48:07,87 GRPN INFO For 2 days, clock-NaN takes 0:00:03.226290
+12:48:07,597 GRPN INFO For 2 days, business-NaN takes 0:00:00.510362
+12:48:08,442 JBLU INFO For 2 days, reading data takes 0:00:00.844600
+12:48:10,540 JBLU INFO For 2 days, clock-ThrowOut takes 0:00:02.098489
+12:48:12,538 JBLU INFO For 2 days, clock-NaN takes 0:00:01.996415
+12:48:12,732 JBLU INFO For 2 days, business-NaN takes 0:00:00.194137
+12:48:17,333 MSFT INFO For 2 days, reading data takes 0:00:04.601265
+12:48:22,138 MSFT INFO For 2 days, clock-ThrowOut takes 0:00:04.805412
+12:48:26,868 MSFT INFO For 2 days, clock-NaN takes 0:00:04.728348
+12:48:27,988 MSFT INFO For 2 days, business-NaN takes 0:00:01.120796
+12:48:29,712 RAD INFO For 2 days, reading data takes 0:00:01.723221
+12:48:33,256 RAD INFO For 2 days, clock-ThrowOut takes 0:00:03.544519
+12:48:36,712 RAD INFO For 2 days, clock-NaN takes 0:00:03.454450
+12:48:37,251 RAD INFO For 2 days, business-NaN takes 0:00:00.539383
+12:48:54,87 SPY INFO For 2 days, reading data takes 0:00:16.835948
+12:49:04,585 SPY INFO For 2 days, clock-ThrowOut takes 0:00:10.497451
+12:49:14,577 SPY INFO For 2 days, clock-NaN takes 0:00:09.991091
+12:49:19,234 SPY INFO For 2 days, business-NaN takes 0:00:04.657305

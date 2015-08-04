@@ -13,7 +13,7 @@ rename <- function(x){
   }
 }
 autocorrOfShares <- function(aTimeSeries, aSymbol, aExchange, aTimeInterval, aSuffix){
-  myACF = acf(aTimeSeries, na.action = na.pass, 30)
+  myACF = acf(aTimeSeries, na.action = na.pass, 100)
   png(filename = paste(myOutputFolder, "acf", aExchange,  ".png", sep=""))
   plot(myACF,
        main = paste(aExchange, "'s ", aSymbol,
@@ -76,28 +76,45 @@ createShareGIF <- function(myFilteredSeries, myExchangeColumns){
   unlink('*.png')
   setwd(paste(getwd(), "/../../", sep=""))
 }
-mySymbol = "BAC"
+orderedSubset <- function(aExhaustiveList, aAvailableList){
+  myInAvailable = c()
+  for(ex in aExhaustiveList){
+    if(ex %in% aAvailableList){
+      myInAvailable = c(myInAvailable, ex)
+    }
+  }
+  return(myInAvailable)
+}
+mySymbol = "GRPN"
 setwd(paste(getwd(), "/Github/TAQ/", sep=""))
-myTimeIntervals = c(1, 10, 120, 1800, 3600, 10800, 19800)
-myEmptyBehavior = "Persist" #"NaN"
+myTimeIntervals = c(1, 30, 60, 300, 600, 3600)
+myTimeIntervals = c(5,10,20)
+myIntervalStyle = "business"
+myEmptyBehavior = "NaN" #"NaN"
+
 for(j in 1:length(myTimeIntervals)){
   myInterval = myTimeIntervals[j]
   myOutputFolder <- paste(getwd(), "/output/correlation/", mySymbol, "/", 
-                          myInterval, "Clock", myEmptyBehavior, "/", sep="")
+                          myInterval, myIntervalStyle, myEmptyBehavior, "/", sep="")
   dir.create(myOutputFolder, showWarnings=FALSE, recursive=TRUE)
   
-  mySeries <- read.csv(paste(getwd(), "\\output\\clockIntervals\\oneWeek", myEmptyBehavior,
-                             myInterval, mySymbol, ".csv", sep =""),
+  mySeries <- read.csv(paste(getwd(), "\\output\\", myIntervalStyle, "Intervals\\", mySymbol, "\\",
+                             myEmptyBehavior, myInterval, ".csv", sep =""),
                        header = TRUE, stringsAsFactors = FALSE)
   
-  myEmptyIntervalCount = sum(mySeries$isEmpty)
-  myEmptyIntervalRate = myEmptyIntervalCount / dim(mySeries)[1]
+  myCounts <- read.csv(paste(getwd(), "\\output\\", myIntervalStyle, "Intervals\\", mySymbol, "\\",
+                             myEmptyBehavior, myInterval, "Counts.csv", sep =""), header = TRUE, 
+                       stringsAsFactors = FALSE)
+  
+  myEmptyIntervalCount = myCounts$emptyCount
+  myEmptyIntervalRate = myEmptyIntervalCount / myCounts$intervalCount
   
   myDescription = paste(round(100*myEmptyIntervalRate,2), "% of intervals were empty. (",
                         myEmptyIntervalCount, " intervals)",
                         sep="")
   
   if(TRUE){
+    myColumns = colnames(mySeries)
     myExchangeColumns <- c("NSX", "CBSX", "NASDAQ.PSX", "CHX",
                            "BATS.BYX", "BATS.EDGA", "NASDAQ.BX",
                            "NYSE", "NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")
@@ -105,27 +122,28 @@ for(j in 1:length(myTimeIntervals)){
     myMakerTakerExchanges <- c("NYSE", "NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")
     myNonNYSEMakerTakerExchanges <- c("NYSE.Arca", "BATS.BZX", "BATS.EDGX", "NASDAQ")                                            
     myNonExchangeColumns <- c("startTime", "endTime", "totalVolume")
-  }
-  if(mySymbol == "GOOG"){
-    myExchangeColumns <- myExchangeColumns[myExchangeColumns != "NYSE"]
-    myMakerTakerExchanges <- myMakerTakerExchanges[myMakerTakerExchanges != "NYSE"]
+    
+    myExchangeColumns=orderedSubset(myExchangeColumns, myColumns)
+    myTakerMakerExchanges=orderedSubset(myTakerMakerExchanges, myColumns)
+    myMakerTakerExchanges=orderedSubset(myMakerTakerExchanges, myColumns)
+    myNonNYSEMakerTakerExchanges=orderedSubset(myNonNYSEMakerTakerExchanges, myColumns)
   }
   
   createShareGIF(mySeries, myExchangeColumns)
   
-  correlationBetweenExchanges(mySeries, "Clock")
-  correlationBetweenExchanges(mySeries, "Clock", TRUE)
+  correlationBetweenExchanges(mySeries, myIntervalStyle)
+  correlationBetweenExchanges(mySeries, myIntervalStyle, TRUE)
   for(i in 1:length(myExchangeColumns)){
     myExchange <- myExchangeColumns[i]
     if(any(!is.nan(mySeries[,myExchange]))){
-      autocorrOfShares(mySeries[,myExchange], mySymbol, myExchange, myInterval, "ClockTime")
+      autocorrOfShares(mySeries[,myExchange], mySymbol, myExchange, myInterval, myIntervalStyle)
     }
   }
   autocorrOfShares(rowSums(mySeries[,myTakerMakerExchanges]), mySymbol,
-                   "TakerMaker", myInterval, "ClockTime")
+                   "TakerMaker", myInterval, myIntervalStyle)
   autocorrOfShares(rowSums(mySeries[,myMakerTakerExchanges]), mySymbol,
-                   "MakerTaker", myInterval, "ClockTime")
+                   "MakerTaker", myInterval, myIntervalStyle)
   autocorrOfShares(rowSums(mySeries[,myNonNYSEMakerTakerExchanges]),
-                   mySymbol, "NonNYSEMakerTaker", myInterval, "ClockTime")
+                   mySymbol, "NonNYSEMakerTaker", myInterval, myIntervalStyle)
 
 }

@@ -203,7 +203,7 @@ def createIntervaledFiles(myPerDateTradeList, myExchange, mySymbol, myStartTime,
     
 if __name__ == "__main__":
     mySymbols = ["AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY"]
-    myDayCount = 2
+    myDayCount = 30
     logging.basicConfig(filename="loglogloglog",
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',

@@ -1,62 +1,47 @@
-12:45:54,82 root INFO Partitioning Trades
-12:45:55,471 AMD INFO For 2 days, reading data takes 0:00:01.388969
-12:45:58,293 AMD INFO For 2 days, clock-ThrowOut takes 0:00:02.821005
-12:46:01,317 AMD INFO For 2 days, clock-NaN takes 0:00:03.024146
-12:46:01,647 AMD INFO For 2 days, business-NaN takes 0:00:00.330253
-12:46:12,394 BAC INFO For 2 days, reading data takes 0:00:10.746610
-12:46:18,808 BAC INFO For 2 days, clock-ThrowOut takes 0:00:06.414552
-12:46:25,814 BAC INFO For 2 days, clock-NaN takes 0:00:07.005971
-12:46:27,617 BAC INFO For 2 days, business-NaN takes 0:00:01.803282
-12:46:27,648 BRKA INFO For 2 days, reading data takes 0:00:00.031022
-12:46:28,761 BRKA INFO For 2 days, clock-ThrowOut takes 0:00:01.112787
-12:46:29,743 BRKA INFO For 2 days, clock-NaN takes 0:00:00.980698
-12:46:29,768 BRKA INFO For 2 days, business-NaN takes 0:00:00.025017
-12:46:30,760 BRKB INFO For 2 days, reading data takes 0:00:00.990702
-12:46:33,996 BRKB INFO For 2 days, clock-ThrowOut takes 0:00:03.236295
-12:46:47,410 root INFO Partitioning Trades
-12:46:47,418 AMD INFO For 1 days, reading data takes 0:00:00.006990
-12:46:54,216 root INFO Partitioning Trades
-12:46:55,624 AMD INFO For 2 days, reading data takes 0:00:01.408017
-12:46:58,417 AMD INFO For 2 days, clock-ThrowOut takes 0:00:02.792966
-12:47:01,291 AMD INFO For 2 days, clock-NaN takes 0:00:02.874040
-12:47:01,586 AMD INFO For 2 days, business-NaN takes 0:00:00.293224
-12:47:12,311 BAC INFO For 2 days, reading data takes 0:00:10.724610
-12:47:18,927 BAC INFO For 2 days, clock-ThrowOut takes 0:00:06.616697
-12:47:25,674 BAC INFO For 2 days, clock-NaN takes 0:00:06.746788
-12:47:27,480 BAC INFO For 2 days, business-NaN takes 0:00:01.805280
-12:47:27,511 BRKA INFO For 2 days, reading data takes 0:00:00.030022
-12:47:28,581 BRKA INFO For 2 days, clock-ThrowOut takes 0:00:01.070760
-12:47:29,562 BRKA INFO For 2 days, clock-NaN takes 0:00:00.979693
-12:47:29,581 BRKA INFO For 2 days, business-NaN takes 0:00:00.019013
-12:47:30,609 BRKB INFO For 2 days, reading data takes 0:00:01.027728
-12:47:33,858 BRKB INFO For 2 days, clock-ThrowOut takes 0:00:03.248307
-12:47:37,190 BRKB INFO For 2 days, clock-NaN takes 0:00:03.332369
-12:47:37,469 BRKB INFO For 2 days, business-NaN takes 0:00:00.277196
-12:47:41,521 C INFO For 2 days, reading data takes 0:00:04.052876
-12:47:45,901 C INFO For 2 days, clock-ThrowOut takes 0:00:04.378109
-12:47:50,171 C INFO For 2 days, clock-NaN takes 0:00:04.269029
-12:47:51,10 C INFO For 2 days, business-NaN takes 0:00:00.839596
-12:47:52,269 GOOG INFO For 2 days, reading data takes 0:00:01.258911
-12:47:55,386 GOOG INFO For 2 days, clock-ThrowOut takes 0:00:03.117195
-12:47:58,344 GOOG INFO For 2 days, clock-NaN takes 0:00:02.958126
-12:47:58,648 GOOG INFO For 2 days, business-NaN takes 0:00:00.303231
-12:48:00,656 GRPN INFO For 2 days, reading data takes 0:00:02.008408
-12:48:03,860 GRPN INFO For 2 days, clock-ThrowOut takes 0:00:03.204274
-12:48:07,87 GRPN INFO For 2 days, clock-NaN takes 0:00:03.226290
-12:48:07,597 GRPN INFO For 2 days, business-NaN takes 0:00:00.510362
-12:48:08,442 JBLU INFO For 2 days, reading data takes 0:00:00.844600
-12:48:10,540 JBLU INFO For 2 days, clock-ThrowOut takes 0:00:02.098489
-12:48:12,538 JBLU INFO For 2 days, clock-NaN takes 0:00:01.996415
-12:48:12,732 JBLU INFO For 2 days, business-NaN takes 0:00:00.194137
-12:48:17,333 MSFT INFO For 2 days, reading data takes 0:00:04.601265
-12:48:22,138 MSFT INFO For 2 days, clock-ThrowOut takes 0:00:04.805412
-12:48:26,868 MSFT INFO For 2 days, clock-NaN takes 0:00:04.728348
-12:48:27,988 MSFT INFO For 2 days, business-NaN takes 0:00:01.120796
-12:48:29,712 RAD INFO For 2 days, reading data takes 0:00:01.723221
-12:48:33,256 RAD INFO For 2 days, clock-ThrowOut takes 0:00:03.544519
-12:48:36,712 RAD INFO For 2 days, clock-NaN takes 0:00:03.454450
-12:48:37,251 RAD INFO For 2 days, business-NaN takes 0:00:00.539383
-12:48:54,87 SPY INFO For 2 days, reading data takes 0:00:16.835948
-12:49:04,585 SPY INFO For 2 days, clock-ThrowOut takes 0:00:10.497451
-12:49:14,577 SPY INFO For 2 days, clock-NaN takes 0:00:09.991091
-12:49:19,234 SPY INFO For 2 days, business-NaN takes 0:00:04.657305
+13:14:00,29 root INFO Partitioning Trades
+13:21:21,899 AMD INFO For 365 days, reading data takes 0:07:21.868596
+13:32:38,535 root INFO Partitioning Trades
+13:33:29,483 AMD INFO For 30 days, reading data takes 0:00:50.948190
+13:34:47,358 AMD INFO For 30 days, clock-ThrowOut takes 0:01:17.875314
+13:36:53,178 AMD INFO For 30 days, clock-NaN takes 0:02:05.820301
+13:37:09,630 AMD INFO For 30 days, business-NaN takes 0:00:16.451676
+13:43:46,475 BAC INFO For 30 days, reading data takes 0:06:36.844658
+13:46:58,796 BAC INFO For 30 days, clock-ThrowOut takes 0:03:12.321500
+13:50:09,729 BAC INFO For 30 days, clock-NaN takes 0:03:10.931513
+13:51:00,940 BAC INFO For 30 days, business-NaN takes 0:00:51.210346
+13:51:02,489 BRKA INFO For 30 days, reading data takes 0:00:01.548099
+13:51:42,625 BRKA INFO For 30 days, clock-ThrowOut takes 0:00:40.135487
+13:52:21,825 BRKA INFO For 30 days, clock-NaN takes 0:00:39.199821
+13:52:22,90 BRKA INFO For 30 days, business-NaN takes 0:00:00.265189
+13:53:07,42 BRKB INFO For 30 days, reading data takes 0:00:44.950902
+13:54:30,695 BRKB INFO For 30 days, clock-ThrowOut takes 0:01:23.653377
+13:56:04,785 BRKB INFO For 30 days, clock-NaN takes 0:01:34.088780
+13:56:15,814 BRKB INFO For 30 days, business-NaN takes 0:00:11.028825
+13:59:05,269 C INFO For 30 days, reading data takes 0:02:49.455288
+14:01:36,737 C INFO For 30 days, clock-ThrowOut takes 0:02:31.468489
+14:04:11,931 C INFO For 30 days, clock-NaN takes 0:02:35.192147
+14:05:05,535 C INFO For 30 days, business-NaN takes 0:00:53.603025
+14:06:11,176 GOOG INFO For 30 days, reading data takes 0:01:05.640588
+14:07:33,326 GOOG INFO For 30 days, clock-ThrowOut takes 0:01:22.150306
+14:09:03,725 GOOG INFO For 30 days, clock-NaN takes 0:01:30.398159
+14:09:16,503 GOOG INFO For 30 days, business-NaN takes 0:00:12.778072
+14:10:31,621 GRPN INFO For 30 days, reading data takes 0:01:15.118312
+14:11:47,504 GRPN INFO For 30 days, clock-ThrowOut takes 0:01:15.882861
+14:13:11,620 GRPN INFO For 30 days, clock-NaN takes 0:01:24.115698
+14:13:33,181 GRPN INFO For 30 days, business-NaN takes 0:00:21.561305
+14:14:32,96 JBLU INFO For 30 days, reading data takes 0:00:58.914811
+14:15:49,159 JBLU INFO For 30 days, clock-ThrowOut takes 0:01:17.063697
+14:17:09,870 JBLU INFO For 30 days, clock-NaN takes 0:01:20.709281
+14:17:21,709 JBLU INFO For 30 days, business-NaN takes 0:00:11.839402
+14:20:37,574 MSFT INFO For 30 days, reading data takes 0:03:15.865034
+14:23:04,939 MSFT INFO For 30 days, clock-ThrowOut takes 0:02:27.363572
+14:25:33,19 MSFT INFO For 30 days, clock-NaN takes 0:02:28.078101
+14:26:25,137 MSFT INFO For 30 days, business-NaN takes 0:00:52.117996
+14:27:58,577 RAD INFO For 30 days, reading data takes 0:01:33.439318
+14:29:24,439 RAD INFO For 30 days, clock-ThrowOut takes 0:01:25.862036
+14:30:51,336 RAD INFO For 30 days, clock-NaN takes 0:01:26.896674
+14:31:04,48 RAD INFO For 30 days, business-NaN takes 0:00:12.712024
+14:37:59,912 SPY INFO For 30 days, reading data takes 0:06:55.864183
+14:42:06,696 SPY INFO For 30 days, clock-ThrowOut takes 0:04:06.783135
+14:46:52,475 SPY INFO For 30 days, clock-NaN takes 0:04:45.777847
+14:49:10,205 SPY INFO For 30 days, business-NaN takes 0:02:17.728752

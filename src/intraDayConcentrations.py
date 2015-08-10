@@ -1,7 +1,6 @@
 import datetime
 import csv
 import math
-import time
 import os
 import itertools
 import taqbreakdown
@@ -200,6 +199,7 @@ def createIntervaledFiles(myPerDateTradeList, myExchange, mySymbol, myStartTime,
                                           myIntervalStyle + "Intervals\\" + mySymbol + "\\",
                                           myEmptyBehavior + str(i),
                                           myEmptyCount, myIntervalCount)
+        return(myPerDateExchPropsPerInterv)
     
 if __name__ == "__main__":
     mySymbols = ["AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY"]
@@ -210,6 +210,7 @@ if __name__ == "__main__":
                             datefmt='%H:%M:%S',
                             level=logging.DEBUG)
     logging.info("Partitioning Trades")
+    
     for mySymbol in mySymbols:
         myExTime = datetime.datetime.now()
         myLogger = logging.getLogger(mySymbol)
@@ -220,8 +221,8 @@ if __name__ == "__main__":
         myEmptyBehavior = "ThrowOut"
         myEmptyBehavior = "NaN"
         myIntervals = [1, 30, 60, 300, 600, 3600]
-        myBusinessIntervals = [5,10,20]
-        
+        myBusinessIntervals = [1,5,10,20]
+        myBusinessIntervals = [1]
         
         print("reading in trades")
         myPerDateTradeList = getPerDateTradeList(os.path.join(os.getcwd(), "..\\data\\2014SymbolData\\") + mySymbol + '.csv',
@@ -229,12 +230,12 @@ if __name__ == "__main__":
         myExchanges = set(x.exchange for t in myPerDateTradeList.values() for x in t)
         myLogger.info("For " + str(myDayCount) + " days, reading data takes " + str(datetime.datetime.now() - myExTime))
         myExTime = datetime.datetime.now()
-        
+        """
         createIntervaledFiles(myPerDateTradeList, myExchanges, mySymbol, myStartTime, myEndTime, myDates, "clock", "ThrowOut", myIntervals)
         myLogger.info("For " + str(myDayCount) + " days, clock-ThrowOut takes " + str(datetime.datetime.now() - myExTime))
         myExTime = datetime.datetime.now()
         createIntervaledFiles(myPerDateTradeList, myExchanges, mySymbol, myStartTime, myEndTime, myDates, "clock", "NaN", myIntervals)
         myLogger.info("For " + str(myDayCount) + " days, clock-NaN takes " + str(datetime.datetime.now() - myExTime))
-        myExTime = datetime.datetime.now()
+        myExTime = datetime.datetime.now()"""
         createIntervaledFiles(myPerDateTradeList, myExchanges, mySymbol, myStartTime, myEndTime, myDates, "business", "NaN", myBusinessIntervals)
         myLogger.info("For " + str(myDayCount) + " days, business-NaN takes " + str(datetime.datetime.now() - myExTime))

@@ -45,3 +45,5 @@
 14:42:06,696 SPY INFO For 30 days, clock-ThrowOut takes 0:04:06.783135
 14:46:52,475 SPY INFO For 30 days, clock-NaN takes 0:04:45.777847
 14:49:10,205 SPY INFO For 30 days, business-NaN takes 0:02:17.728752
+08:16:11,220 root INFO Partitioning Trades
+08:16:53,983 AMD INFO For 30 days, reading data takes 0:00:42.761368

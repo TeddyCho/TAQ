@@ -10,6 +10,28 @@ createAggregateMultiBar <- function(aBreakdown, aTickSizeString, aTickSizeWord){
   myVolumesByExchange$Common = NULL
   return(list("table" = myVolumesByExchange, "plot" = n1))
 }
+
+createExchangeShareLines<-function(myBreakdown, aChartType){
+  myFilteredBreakdown = myBreakdown[which(myBreakdown$TOD == "Regular" & 
+                                            myBreakdown$Exchange != "Consolidated Tape System"),]
+  myFilteredBreakdown = myFilteredBreakdown[order(myFilteredBreakdown$Date),]
+  myFilteredBreakdown$Proportion = round(myFilteredBreakdown$Proportion,4)
+  myMaxProportion = max(myFilteredBreakdown$Proportion)
+  
+  breakdownPlot <- nPlot(Proportion ~ Date, data = myFilteredBreakdown,
+                         group = "Exchange", type = aChartType)
+  
+  breakdownPlot$yAxis(axisLabel = paste("Proportion"), 
+                      showMaxMin = FALSE, width = 40)
+  breakdownPlot$chart(forceY = c(0, 1.1*myMaxProportion))
+  breakdownPlot$xAxis(axisLabel = paste("Date"), tickFormat =   "#!
+                      function(d) {return d3.time.format('%m-%d-%y')(new Date(d*1000*3600*24));}
+                      !#",
+                      rotateLabels = -45,axisLabel = paste("Date"), 
+                      showMaxMin = FALSE, width = 40)
+  breakdownPlot$set(width = 1200, height = 800)
+  return(breakdownPlot)
+}
 createByListedExchangeForTOD <- function(myBreakdown, myListedExchanges, aTODs){
   myBreakdownSimilar = myBreakdown[(myBreakdown$ListedExchange %in% myListedExchanges &
                                     myBreakdown$TOD %in% aTODs),]

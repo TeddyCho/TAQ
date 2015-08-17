@@ -28,12 +28,6 @@ def inferTimeOfDay(aSaleConditionString):
         return "Regular"  
 
 def inferExchange(aExchangeString):
-    myCodeDict = {"A":"NYSE MKT", "B":"NASDAQ BX", "C":"NSX",
-                  "D":"FINRA", "I":"ISE", "J":"BATS EDGA",
-                  "K":"BATS EDGX", "M":"CHX", "N":"NYSE",
-                  "T":"NASDAQ", "P":"NYSE Arca", "S":"Consolidated Tape System",
-                  "T/Q":"NASDAQ", "Q":"NASDAQ", "W":"CBSX", "X":"NASDAQ PSX",
-                  "Y":"BATS BYX", "Z":"BATS BZX"} 
     try:
         return myCodeDict[aExchangeString]
     except:
@@ -53,21 +47,24 @@ def updateBreakdownWithTrade(aBreakdown, aTrade):
         aBreakdown[mySymbol] = {}
     if(myDate not in aBreakdown[mySymbol].keys()):
         aBreakdown[mySymbol][myDate] = {}
-    if(myExchange not in aBreakdown[mySymbol][myDate].keys()):
-        aBreakdown[mySymbol][myDate][myExchange] = {"Open":0, "Regular":0,"Close":0, "After-Hours":0}
+        for exch in myCodeDict.values():
+            aBreakdown[mySymbol][myDate][exch] = {"Open":0, "Regular":0,"Close":0, "After-Hours":0}
     aBreakdown[mySymbol][myDate][myExchange][myTOD] += mySize
     return(aBreakdown)
 
 def writeBreakdownToCsv(aBreakdown, aFileName):
     with open(aFileName, 'wt') as aFile:
         myCsvWriter = csv.writer(aFile)
-        myCsvWriter.writerow(["Symbol", "Date", "Exchange", "TOD", "Volume"])
+        myCsvWriter.writerow(["Symbol", "Date", "Exchange", "TOD", "Volume", "Proportion"])
         for mySymbol in aBreakdown.keys():
             for myDate in aBreakdown[mySymbol].keys():
                 for myExchange in aBreakdown[mySymbol][myDate].keys():
                     for myTOD in aBreakdown[mySymbol][myDate][myExchange].keys():
+                        myExchanges = set(myCodeDict.values())
+                        myTotal = sum([aBreakdown[mySymbol][myDate][exch][myTOD] for exch in myExchanges if exch not in ["FINRA", "Consolidated Tape System"]])
                         myVolume = aBreakdown[mySymbol][myDate][myExchange][myTOD]
-                        myCsvWriter.writerow([mySymbol, myDate, myExchange, myTOD, myVolume])
+                        myProp = myVolume / myTotal if myTotal != 0 else float('nan')
+                        myCsvWriter.writerow([mySymbol, myDate, myExchange, myTOD, myVolume, myProp])
 
 def unzipFile(aFilePath):
     print("Unzipping %s" % aFilePath)
@@ -84,8 +81,8 @@ def countRows(aCsvFile):
         print("Row Count: " + str(theRowCount))
         print("Time elapsed: %s seconds" % (time.time() - t))
         return(theRowCount)
-
-def updateBreakdown(aBreakdown, aCsvFile, aRowCount):
+                
+def updateBreakdown(aBreakdown, aCsvFile):
     i=1
     with open(aCsvFile, 'r') as f:
         myReader = csv.DictReader(f)
@@ -93,43 +90,24 @@ def updateBreakdown(aBreakdown, aCsvFile, aRowCount):
             aBreakdown = updateBreakdownWithTrade(aBreakdown, myTrade)
             i += 1
             if i%50000==0:
-                print(str(i/aRowCount))
+                print(myTrade["SYMBOL"] + " " + myTrade["DATE"] + " " + myTrade["TIME"])
     return(aBreakdown)
 
 if __name__ == '__main__':
-    myFileNameFolder = os.getcwd() + "\\..\\data\\"
-    myFileName = "5aa0ce4b018e0067"
-
-    myBreakdown = {}
-    myRowCount = 129048290 # countRows(myFileNameFolder + myFileName + ".csv")
-    t = time.time()
+    myFileNameFolder = os.getcwd() + "\\..\\data\\2014SymbolData\\"
+    myCodeDict = {"A":"NYSE MKT", "B":"NASDAQ BX", "C":"NSX", "D":"FINRA", "I":"ISE", "J":"BATS EDGA",
+                  "K":"BATS EDGX", "M":"CHX", "N":"NYSE", "T":"NASDAQ", "P":"NYSE Arca", "S":"Consolidated Tape System",
+                  "T/Q":"NASDAQ", "Q":"NASDAQ", "W":"CBSX", "X":"NASDAQ PSX", "Y":"BATS BYX", "Z":"BATS BZX"} 
     
+    mySymbols = ["AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY"]
     
-    myBreakdown = updateBreakdown(myBreakdown, myFileNameFolder + myFileName + ".csv", myRowCount)
-    print("Time elapsed: %s seconds" % (time.time() - t))
-    
-    myCsvFile = os.getcwd() + "\\..\\data\\breakdown" + myFileName  + ".csv"
-    writeBreakdownToCsv(myBreakdown, myCsvFile)
-    
-    
-    """
-    temp = list()
-    i=1
-    with open(myFileNameFolder + myFileName + ".csv", 'r') as f:
-        myReader = csv.DictReader(f)
-        for myTrade in myReader:
-            if myTrade["SYMBOL"] == "AMD" and time.strptime(myTrade["TIME"], "%H:%M:%S") > time.strptime("16:00:00", "%H:%M:%S"):
-                print(myTrade["SYMBOL"])
-                temp.append(myTrade)
-            if i%5000 == 0:
-                print(i/250000)
-            if i%250000==0:
-                break
-            i+=1
-    with open('temp.csv', 'w', newline = '') as output_file:
-        print(temp[0].keys())
-        dict_writer = csv.DictWriter(output_file, temp[0].keys())
-        dict_writer.writeheader()
-        dict_writer.writerows(temp)
+    for sym in mySymbols:
+        myFileName = sym + ".csv"
+        myBreakdown = {}
+        t = time.time()
         
-        """
+        myBreakdown = updateBreakdown(myBreakdown, myFileNameFolder + myFileName)
+        print("Time elapsed: %s seconds" % (time.time() - t))
+        
+        myCsvFile = os.getcwd() + "\\..\\data\\breakdown" + myFileName
+        writeBreakdownToCsv(myBreakdown, myCsvFile)

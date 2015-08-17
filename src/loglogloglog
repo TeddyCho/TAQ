@@ -47,3 +47,11 @@
 14:49:10,205 SPY INFO For 30 days, business-NaN takes 0:02:17.728752
 08:16:11,220 root INFO Partitioning Trades
 08:16:53,983 AMD INFO For 30 days, reading data takes 0:00:42.761368
+12:44:06,978 root INFO Partitioning Trades
+12:44:19,557 AMD INFO For 10 days, reading data takes 0:00:12.576930
+12:44:40,88 AMD INFO For 10 days, clock-NaN takes 0:00:20.531572
+12:44:40,89 AMD INFO For 10 days, business-NaN takes 0:00:00
+12:55:00,596 root INFO Partitioning Trades
+12:55:13,830 AMD INFO For 10 days, reading data takes 0:00:13.233389
+12:55:34,706 AMD INFO For 10 days, clock-NaN takes 0:00:20.876821
+12:55:34,706 AMD INFO For 10 days, business-NaN takes 0:00:00

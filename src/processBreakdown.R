@@ -8,7 +8,6 @@ source("src/enrichTAQData.r")
 source("src/createTAQCharts.r")
 source("src/writeTablesToHTML.r")
 
-
 if(TRUE){
   myHomeExchanges = c("NASDAQ", "NYSE", "Arca", "NYSEMKT")
   myTODs = c("Open", "Regular", "Close", "After-Hours")
@@ -17,13 +16,69 @@ if(TRUE){
   myNYSESymbols <-  c("AMD", "CVS", "GE", "WSM", "LTM", "LUV", "BHP", "BRKA", "T", "FE", "BAC", "XOM")
   myArcaSymbols <- c("TBF", "SLV")
   myNYSEMKTSymbols <- c("ONP", "LIQT", "CCF", "ONVO")
-  symbol = c(myNASDAQSymbols, myArcaSymbols, myNYSESymbols, myNYSEMKTSymbols)
-  exchange = c(rep("NASDAQ", length(myNASDAQSymbols)), rep("Arca", length(myArcaSymbols)),
-    rep("NYSE", length(myNYSESymbols)), rep("NYSEMKT", length(myNYSEMKTSymbols)))
-  mySymbolExchange = data.frame(symbol, exchange)
+  mySymbolExchange = data.frame(symbol = c(myNASDAQSymbols, myArcaSymbols, myNYSESymbols, myNYSEMKTSymbols),
+                                listedExchange = c(rep("NASDAQ", length(myNASDAQSymbols)),
+                                                   rep("Arca", length(myArcaSymbols)),
+                                                   rep("NYSE", length(myNYSESymbols)),
+                                                   rep("NYSEMKT", length(myNYSEMKTSymbols))))
   myExchanges = unique(mySymbolExchange$exchange)
 }
-myBreakdown = getTAQBreakdown("\\data\\breakdown5aa0ce4b018e0067.csv", mySymbolExchange)
+
+mySymbols = c("AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
+myExchangesMaster = c("NSX", "CBSX", "NASDAQ PSX", "CHX", "BATS BYX", "BATS EDGA", "NASDAQ BX",
+                      "NYSE MKT","NYSE",  "NYSE Arca", "BATS BZX", "BATS EDGX", "NASDAQ")
+for(sym in mySymbols){
+  myBreakdown = getTAQBreakdown(paste(getwd(), "\\data\\breakdown", sym, ".csv", sep =""),
+                                mySymbolExchange)
+  
+  brkPlot=createExchangeShareLines(myBreakdown, "stackedAreaChart")
+  brkPlot$set(title = paste(sym, "'s Exchange Shares over 2014", sep=""))
+  brkPlot$save(paste(getwd(),'\\output\\exchangeShares\\stackedArea', sym, '.html', sep=""),
+               standalone = TRUE)
+  brkPlot=createExchangeShareLines(myBreakdown, "lineChart")
+  brkPlot$set(title = paste(sym, "'s Exchange Shares over 2014", sep=""))
+  brkPlot$save(paste(getwd(),'\\output\\exchangeShares\\line', sym, '.html', sep=""),
+               standalone = TRUE)
+}
+for(sym in mySymbols){
+  if(sym == mySymbols[1]){
+    myBreakdown = getTAQBreakdown(paste(getwd(), "\\data\\breakdown", sym, ".csv", sep =""), mySymbolExchange)
+  }else{
+    myBreakdown = rbind(myBreakdown, getTAQBreakdown(paste(getwd(), "\\data\\breakdown", sym, ".csv", sep =""),
+                                        mySymbolExchange))
+    print(sym)
+  }}
+
+myExchanges = unique(myBreakdown$Exchange)
+for(exch in myExchanges){
+  myFilteredBreakdown = myBreakdown[which(myBreakdown$TOD == "Regular" & 
+                                            myBreakdown$Exchange == exch),]
+  myFilteredBreakdown = myFilteredBreakdown[order(myFilteredBreakdown$Date),]
+  myFilteredBreakdown$Proportion = round(myFilteredBreakdown$Proportion,4)
+  myMaxProportion = max(myFilteredBreakdown$Proportion)
+  
+  breakdownPlot <- nPlot(Proportion ~ Date, data = myFilteredBreakdown,
+                         group = "Symbol", type = "lineChart")
+  
+  breakdownPlot$yAxis(axisLabel = paste("Proportion"), 
+                      showMaxMin = FALSE, width = 40)
+  breakdownPlot$chart(forceY = c(0, 1.1*myMaxProportion))
+  breakdownPlot$xAxis(axisLabel = paste("Date"), tickFormat =   "#!
+                      function(d) {return d3.time.format('%m-%d-%y')(new Date(d*1000*3600*24));}
+                      !#",
+                      rotateLabels = -45,axisLabel = paste("Date"), 
+                      showMaxMin = FALSE, width = 40)
+  
+  breakdownPlot$set(width = 1200, height = 800)
+  
+  #brkPlot=createExchangeShareLines(myBreakdown, "lineChart")
+  breakdownPlot$set(title = paste(exch, "'s Shares over 2014", sep=""))
+  breakdownPlot$save(paste(getwd(),'\\output\\exchangeShares\\line', exch, '.html', sep=""),
+               standalone = TRUE)
+  
+}
+
+
 
 myResults <- createAggregateMultiBar(myBreakdown, "1000000000", "billions")
 myResults$plot$save(paste(getwd(),'\\output\\breakdowncharts\\AllStocks.html', sep=""), standalone = TRUE)

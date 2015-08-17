@@ -9,8 +9,8 @@ myFolder = paste(getwd(), "/output/regression/", mySymbol, "/",
 mySeries <- read.csv(paste(myFolder,"regression", ".csv", sep=""),
                      header = TRUE, stringsAsFactors = FALSE)
 
-
-myFilterSeries = mySeries[which(mySeries$interval==myInterval & !(mySeries$exchange %in% c("CHX", "NSX", "CBSX"))),]
+myFilterSeries = mySeries[which(mySeries$interval==myInterval &
+                                  !(mySeries$exchange %in% c("CHX", "NSX", "CBSX"))),]
 myNumberOfExchanges = length(myFilterSeries$Intercept)
 
 myCoeffs = rbind(cbind(rep(0, myNumberOfExchanges), myFilterSeries$Intercept),

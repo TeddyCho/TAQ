@@ -1,6 +1,5 @@
 getTAQBreakdown <- function(aFilePath, aSymbolExchange){
-  aFileName<- paste(getwd(), aFilePath, sep ="")
-  myBreakdown <- read.csv(aFileName, header = TRUE)
+  myBreakdown <- read.csv(aFilePath, header = TRUE)
   
   myBreakdown = myBreakdown[myBreakdown$Exchange != "FINRA", ]
   
@@ -8,11 +7,12 @@ getTAQBreakdown <- function(aFilePath, aSymbolExchange){
   myBreakdown$DaysSince = myBreakdown$Date - as.Date("2014-01-01")
   
   myBreakdown$ListedExchange <- sapply(myBreakdown$Symbol,
-                                       function(x) inferListedExchangeFromSymbol(x, aSymbolExchange))
+                                       function(x) inferListedExchangeFromSymbol(as.character(x), aSymbolExchange))
   myBreakdown
 }
 
 inferListedExchangeFromSymbol <- function(aSymbol, aSymbolExchange) {
   theExchange = "UNKNOWN"
-  theExchange = aSymbolExchange$exchange[aSymbolExchange$symbol == aSymbol]
+  theExchange = aSymbolExchange$listedExchange[which(aSymbolExchange$symbol == aSymbol)]
+  return(theExchange)
 }

@@ -3,17 +3,42 @@
 \usepackage{float}
 \begin{document}
 
-\title{Exchange Volume Shares} \author{Teddy Cho}
+\title{Exchange Volume Shares} \author{Paul Kim and Teddy Cho}
 
 \maketitle
 \vspace{.5pc}
 
-\section{Data}
+\section{Data for Macro Trends}
 We use historical data from the NYSE Trade and Quote database\footnote{We note that this data is known to have inaccuracies regarding quotes' timestamps, and such issues may carry over to trade timestamps. These issues stem from timestamps originating from a secondary source (i.e., not the exchanges' order matching engines) and being derived after an exchange aggregation method which introduces further latency\footnote{See Budish, Cramton and Shim (2015) and Ding, Hanna and Hendershott (2014)}.}, made available by Wharton Research Data Services. The dataset ``contains intraday transactions data (trades and quotes) for all securities listed on the New York Stock Exchange (NYSE), American Stock Exchange (AMEX), as well as Nasdaq National Market System (NMS) and SmallCap issues''\footnote{See https://wrds-web.wharton.upenn.edu/wrds/ds/taq/index.cfm.}.\\
 
-Our data cover all trades for our sample of symbols\footnote{Our sample of symbols consists of AMD, BAC, BRKA, BRKB, C, GOOG, GRPN, JBLU, MSFT, RAD, SPY.} over the period of Jan 1, 2014 - Jan 31, 2014. No time filtering is used, and we are left with 20 trading days total.\\
+Our data cover all trades for a sample of symbols\footnote{Our sample of symbols consists of AMD, BAC, C, GOOG, GRPN, JBLU, MSFT, and RAD.} over the period of Mar 1, 2014 - Mar 31, 2014. No time filtering is used, and we are left with 20??? trading days total.\\
 
-Future notes: Also explore how market shares look just before close auction, at different times of day, etc. Why do spikes happen in certain exchange. Look at times where we cannot explain, like instituional things. Consider throwing out expiration days, holidays, memorial day weekend.\\
+\section{Macro Trends}
+\subsection{Daily Exchange Shares}
+To get a sense of trends of where stocks trade, we compute the daily exchange shares for each stock $i$ on exchange $j$ for day $t$ from its trade volumes $q$\\
+$$s_{ijt} = \frac{q_{ijt}}{q_{it}}.$$\\
+This $s_{ijt}$ was plotted and stored in Dropbox under the /exchangeShare/ folder. A few are shown here:\\
+\begin{figure}[H]
+\centering
+\includegraphics[width=50mm]{{./../output/exchangeShares/linemsft}.png}
+\includegraphics[width=50mm]{{./../output/exchangeShares/linebrka}.png}
+\includegraphics[width=50mm]{{./../output/exchangeShares/stackedAreaMSFT}.png}
+\includegraphics[width=50mm]{{./../output/exchangeShares/stackedAreaBRKA}.png}\\
+\caption{The left column shows exchange shares for MSFT in both line and stacked area chart form. The right column shows exchange shares for BRKA.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=50mm]{{./../output/exchangeShares/linebats.byx}.png}
+\includegraphics[width=50mm]{{./../output/exchangeShares/linebats.bzx}.png}
+\includegraphics[width=50mm]{{./../output/exchangeShares/linenasdaq}.png}
+\includegraphics[width=50mm]{{./../output/exchangeShares/linensx}.png}\\
+\caption{Each graph shows the daily volumes shares for a given exchange for each of 11 symbols. Clockwise from top left, BATS BYX (shows an increasing trend), BATS BZX (shows BRKA's inflated share due to no recorded NASDAQ volume) , NASDAQ (shows quarterly spikes in some home symbols), and NSX (illustrates its May 2014 demise).}
+\end{figure}
+
+\section{Data for Correlation Calculations}
+Our data is sourced as above, but covers all trades for a different sample of symbols\footnote{Our sample of symbols consists of AMD, BAC, BRKA, BRKB, C, GOOG, GRPN, JBLU, MSFT, RAD, SPY.} over the period of Jan 1, 2014 - Jan 31, 2014. No time filtering is used, and we are left with 20 trading days total.\\
+
+Future notes: Also explore how market shares look just before close auction, at different times of day, etc. Why do spikes happen in certain exchange. Look at times where we cannot explain, like instituional things. Consider throwing out expiration days, holidays, memorial day weekend.\\		
 
 \section{Partitioning Data}
 \subsection{Goals}
@@ -22,8 +47,8 @@ From trades data, we wish to get a sense of exchange share over time. In order t
 \subsection{Time-Based}
 Time is partitioned into windows of equal length, and each trade is assigned to the partition which contains its timestamp. This method allowed for partitions to contain no trades, and we explored three ways to deal with these empty partitions.\\
 
-Within a given symbol, the exchange $i$'s share for the time interval beginning at $T$ is given by
-$$p_{iT} = \frac{\sum_{T\underline{<}t < (T+\Delta T)} q_{it}}{\sum_{T\underline{<}t < (T+\Delta T)}q_{t}}$$
+Within a given symbol, the exchange $j$'s share for the time interval beginning at $T$ is given by
+$$s_{jT} = \frac{\sum_{T\underline{<}t < (T+\Delta T)} q_{jt}}{\sum_{T\underline{<}t < (T+\Delta T)}q_{t}}$$
 where $q$ refers to a trade's volume and $\Delta T$ refers to the time interval.\\
 
 \subsubsection{Passing Over} \label{passoverempty}
@@ -38,15 +63,15 @@ To simulate that a regime simply continued if no trading activity occurred, we e
 \subsection{Trade-Based}
 Trades are partitioned into sequential groups of $n$ trades. To get a sense of the duration of these partitions, we compute a moving average of these partitions for our dataset.\\
 
-If we index volumes $q$ of trades by $k$, the exchange $i$'s share at interval $j$ is now given by
-$$p_{ij} = \frac{\sum_{n \cdot j \underline{<} k < n \cdot (j+1)} q_{ik}}{\sum_{n \cdot j \underline{<} k < n \cdot (j+1)}q_{k}}.$$
+If we index volumes $q$ of trades by $z$, the exchange $j$'s share at interval $k$ is now given by
+$$s_{jk} = \frac{\sum_{n \cdot j \underline{<} z < n \cdot (k+1)} q_{jz}}{\sum_{n \cdot k \underline{<} z < n \cdot (k+1)}q_{z}}.$$
 
 \section{Data Transformation}
 The main concern about using compositional data is the constraint that all the values sum to 1 in all periods.\\
 
-Further, we wish to normalize an exchange's share based on the exchange's ``typical'' exchange share. To do this, we took the exchange $x$'s share $p$ of stock $s$ in the interval $t$$p_{sxt}$ and used its deviation from the exchange $x$'s average share $\overline{p}$ of stock $s$ over the available timerange as a proportion of the average share. We call this $z$ and use
+Further, we wish to normalize an exchange's share based on the exchange's ``typical'' exchange share. To do this, we took the exchange $j$'s share $s$ of stock $i$ in the interval $t$, $s_{ijt}$, and used its deviation from the exchange $j$'s average share $\overline{s}$ of stock $i$ over the available timerange as a proportion of the average share. We call this $z$ and use
 
-$$z_{sxt} = \frac{p_{sxt} - \overline{p_{sx}}}{\overline{p_{sx}}}.$$
+$$z_{ijt} = \frac{s_{ijt} - \overline{s_{ij}}}{\overline{s_{ij}}}.$$
 
 \section{Autocorrelation}
 \subsection{Goals}
@@ -104,8 +129,8 @@ where $z_{it}$ and $z_{jt}$ are exchange volume share scores for exchange $a$ an
 The following are correlation matrices for various symbols which embody trends representative of the sample. The exchanges are ordered just as in section \ref{withinperiodcorr}.\\
 
 The value in cell $(i, j)$ is the correlation of exchange $i$'s share with exchange $j$'s share in the next (lag 1) period.\\
-$$r_{z_{i}z_{j}} = \frac{\sum_{t=1}^{n-1} z_{it} z_{j(t+1)} - n\bar{z_i}\bar{z_j}}{(n-2)s_{z_i}s_{z_j}}$$
-where $z_{i,t}$ and $z_{j,t}$ are exchange volume share scores for exchange $a$ and $b$ at time $t$, and $s_{z_i}$ and $s_{z_j}$ are the sample standard deviations for $z_{it}$ and $z_{jt}$, respectively.
+$$r_{z_{i}z_{j}} = \frac{\sum_{t=1}^{n-1} z_{it} z_{j(t+1)} - n\bar{z_i}\bar{z_j}}{(n-2)\gamma_{z_i}\gamma_{z_j}}$$
+where $z_{i,t}$ and $z_{j,t}$ are exchange volume share scores for exchange $a$ and $b$ at time $t$, and $\gamma_{z_i}$ and $\gamma_{z_j}$ are the sample standard deviations for $z_{it}$ and $z_{jt}$, respectively.
 
 \begin{figure}[H]
 \centering
@@ -144,8 +169,10 @@ where $z_{i,t}$ and $z_{j,t}$ are exchange volume share scores for exchange $a$ 
 
 \section{Regression}
 We also formulate the binary variable $A_{sxt}$ as the indicator function based on whether stock $s$ had activity on exchange $x$ at interval $t$. We then regress this variable on lagged $A_{sxt}$:\\
-$$A_{sxt} = \alpha_{sx} + \beta_1\cdot A_{sx(t-1)} + \beta_2\cdot A_{sx(t-2)} + \beta_2\cdot A_{sx(t-3)} + \beta_2\cdot A_{sx(t-4)} + \beta_2\cdot A_{sx(t-5)} + \epsilon.$$
-We find that the resulting $\beta$s are generally positive with significant $p$-values. The coefficients are plotted for some examples here:
+$$A_{sxt} = \alpha_{sx} + \beta_1\cdot A_{sx(t-1)} + \beta_2\cdot A_{sx(t-2)} + \beta_2\cdot A_{sx(t-3)} + \beta_2\cdot A_{sx(t-4)} + \beta_2\cdot A_{sx(t-5)} + \epsilon.$$\\
+
+Consider adding in a volume variable, because if big volumes trade, then volume goes up necessarily.\\
+We find that the resulting $\beta$s are generally positive with significant $p$-values. The coefficients are plotted for some examples here:\\
 \begin{figure}[H]
 \centering
 \includegraphics[width=50mm]{{./../output/regression/AMD/businessNaN/5coeffs}.png}

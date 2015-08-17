@@ -1,29 +1,36 @@
 \relax 
-\@writefile{toc}{\contentsline {section}{\numberline {1}Data}{1}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Partitioning Data}{1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Goals}{1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Time-Based}{2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}Passing Over}{2}}
-\newlabel{passoverempty}{{2.2.1}{2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}Discarding}{2}}
-\newlabel{discardempty}{{2.2.2}{2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.3}Persisting Last State Through}{2}}
-\newlabel{persistempty}{{2.2.3}{2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Trade-Based}{2}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Data Transformation}{3}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Autocorrelation}{3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Goals}{3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Comparing Different Partitioning Methods}{3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Autocorrelation plots for BATS EDGX's exchange share: the top two plots used a time-partitioning scheme whereby trades were assigned to windows resulting from partitioning the timerange into 30 second intervals. The left plot passed over empty intervals as described in section 2.2.1\hbox {}, and the right plot discarded empty intervals as described in section 2.2.2\hbox {}. The third plot used a trade-partitioning scheme whereby trades were partitioned sequentially into groups of 5; note that this yields a more geometric decay and a steeper decline than the preious autocorrelation plots.}}{4}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Inter-Exchange Correlations}{4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Within-Period Correlation}{4}}
-\newlabel{withinperiodcorr}{{5.1}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Correlation matrices for exchange shares in various stocks, using the trade-partitioning method for 20 trade intervals. Note correlations among the Taker/Maker exchange shares are positive. However, the Maker/Taker exchange shares show negative correlations between each other and against the Taker/Maker exchanges. There is an interesting pattern in BAC where the strongest correlations are those between exchanges of different fee structure; within the two groups of exchanges, correlations are less negative.}}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Correlation matrices for exchange shares in various stocks, using the time-partitioning method for 60 second intervals (method for dealing with empty intervals does not affect within-period correlations). The same patterns as in the previous set of graphs are present, with the particular correlations among Maker/Taker exchanges particularly dampened.}}{7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Single Lagged Correlation}{7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Correlation matrices for exchange shares in various stocks, using the trade-partitioning method for 20 trade interals. The diagonal is simply the lag 1 autocorrelation for the respective exchange. Though weak, we can see a fainter inter-exchange effect analagous to within-period inter-exchange correlations.}}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Correlation matrices for exchange shares in various stocks, using the time-partitioning method for 60 second intervals. The weak inter-exchange correlation trends mirror those in previous correlation matrices.}}{9}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Regression}{9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces For a given symbol and partitioning method, each graph plots the regression coefficients for the intercept (on $x$=0) and for the lagged variables (on $x \in \{1,2,3,4,5\}$ for each respective lag). As each graph plots for all major exchanges, there is one coefficient for each exchange for each variable.}}{10}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Variance}{10}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Compositional Data}{11}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Data for Macro Trends}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Macro}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Each column illustrates the aggregate exchange volume breakdown for the sample of stocks of a given home exchange in the year 2014. Across stocks of a given home exchange, shares were consistent. (Graphs available in \textbackslash TAQ\textbackslash output\textbackslash breakdownCharts\textbackslash }}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Macro Trends}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Daily Exchange Shares}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The left column shows exchange shares for MSFT in both line and stacked area chart form. The right column shows exchange shares for BRKA.}}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Each graph shows the daily volumes shares for a given exchange for each of 11 symbols. Clockwise from top left, BATS BYX (shows an increasing trend), BATS BZX (shows BRKA's inflated share due to no recorded NASDAQ volume) , NASDAQ (shows quarterly spikes in some home symbols), and NSX (illustrates its May 2014 demise).}}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Data for Correlation Calculations}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Partitioning Data}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Goals}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Time-Based}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Passing Over}{4}}
+\newlabel{passoverempty}{{5.2.1}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Discarding}{5}}
+\newlabel{discardempty}{{5.2.2}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.3}Persisting Last State Through}{5}}
+\newlabel{persistempty}{{5.2.3}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Trade-Based}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Data Transformation}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Autocorrelation}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Goals}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Comparing Different Partitioning Methods}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Autocorrelation plots for BATS EDGX's exchange share: the top two plots used a time-partitioning scheme whereby trades were assigned to windows resulting from partitioning the timerange into 30 second intervals. The left plot passed over empty intervals as described in section 5.2.1\hbox {}, and the right plot discarded empty intervals as described in section 5.2.2\hbox {}. The third plot used a trade-partitioning scheme whereby trades were partitioned sequentially into groups of 5; note that this yields a more geometric decay and a steeper decline than the preious autocorrelation plots.}}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Inter-Exchange Correlations}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Within-Period Correlation}{7}}
+\newlabel{withinperiodcorr}{{8.1}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Correlation matrices for exchange shares in various stocks, using the trade-partitioning method for 20 trade intervals. Note correlations among the Taker/Maker exchange shares are positive. However, the Maker/Taker exchange shares show negative correlations between each other and against the Taker/Maker exchanges. There is an interesting pattern in BAC where the strongest correlations are those between exchanges of different fee structure; within the two groups of exchanges, correlations are less negative.}}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Correlation matrices for exchange shares in various stocks, using the time-partitioning method for 60 second intervals (method for dealing with empty intervals does not affect within-period correlations). The same patterns as in the previous set of graphs are present, with the particular correlations among Maker/Taker exchanges particularly dampened.}}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Single Lagged Correlation}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Correlation matrices for exchange shares in various stocks, using the trade-partitioning method for 20 trade interals. The diagonal is simply the lag 1 autocorrelation for the respective exchange. Though weak, we can see a fainter inter-exchange effect analagous to within-period inter-exchange correlations.}}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Correlation matrices for exchange shares in various stocks, using the time-partitioning method for 60 second intervals. The weak inter-exchange correlation trends mirror those in previous correlation matrices.}}{12}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Regression}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces For a given symbol and partitioning method, each graph plots the regression coefficients for the intercept (on $x$=0) and for the lagged variables (on $x \in \{1,2,3,4,5\}$ for each respective lag). As each graph plots for all major exchanges, there is one coefficient for each exchange for each variable.}}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Variance}{14}}
+\@writefile{toc}{\contentsline {section}{\numberline {11}Compositional Data}{14}}

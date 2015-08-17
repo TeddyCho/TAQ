@@ -176,10 +176,11 @@ def computeTotalExchangeProportionsPerInterval(myPerDateTradeList, myStartTime, 
     myExchangeProportionsPerInterval = [line for dateList in myPerDateExchangeProportionsPerInterval.values() for line in dateList]
     myExchangeProportionsPerInterval = sorted(myExchangeProportionsPerInterval, key=lambda k: k['startTime'])
     
+    theResult = myExchangeProportionsPerInterval
     print("transforming to scores")
-    theScoresPerInterval = transformProportionsToScores(myExchangeProportionsPerInterval, myExchanges)
+    theResult = transformProportionsToScores(myExchangeProportionsPerInterval, myExchanges)
     
-    return(theScoresPerInterval, myEmptyCount, myIntervalCount)
+    return(theResult, myEmptyCount, myIntervalCount)
 def createIntervaledFiles(myPerDateTradeList, myExchange, mySymbol, myStartTime, myEndTime, myDates, myIntervalStyle,
                           myEmptyBehavior, myIntervals):
     
@@ -203,7 +204,9 @@ def createIntervaledFiles(myPerDateTradeList, myExchange, mySymbol, myStartTime,
     
 if __name__ == "__main__":
     mySymbols = ["AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY"]
+    mySymbols = ["AMD"]
     myDayCount = 30
+    myDayCount = 10
     logging.basicConfig(filename="loglogloglog",
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
@@ -230,12 +233,11 @@ if __name__ == "__main__":
         myExchanges = set(x.exchange for t in myPerDateTradeList.values() for x in t)
         myLogger.info("For " + str(myDayCount) + " days, reading data takes " + str(datetime.datetime.now() - myExTime))
         myExTime = datetime.datetime.now()
-        """
-        createIntervaledFiles(myPerDateTradeList, myExchanges, mySymbol, myStartTime, myEndTime, myDates, "clock", "ThrowOut", myIntervals)
+        """createIntervaledFiles(myPerDateTradeList, myExchanges, mySymbol, myStartTime, myEndTime, myDates, "clock", "ThrowOut", myIntervals)
         myLogger.info("For " + str(myDayCount) + " days, clock-ThrowOut takes " + str(datetime.datetime.now() - myExTime))
-        myExTime = datetime.datetime.now()
+        myExTime = datetime.datetime.now()"""
         createIntervaledFiles(myPerDateTradeList, myExchanges, mySymbol, myStartTime, myEndTime, myDates, "clock", "NaN", myIntervals)
         myLogger.info("For " + str(myDayCount) + " days, clock-NaN takes " + str(datetime.datetime.now() - myExTime))
-        myExTime = datetime.datetime.now()"""
-        createIntervaledFiles(myPerDateTradeList, myExchanges, mySymbol, myStartTime, myEndTime, myDates, "business", "NaN", myBusinessIntervals)
+        myExTime = datetime.datetime.now()
+        """createIntervaledFiles(myPerDateTradeList, myExchanges, mySymbol, myStartTime, myEndTime, myDates, "business", "NaN", myBusinessIntervals)"""
         myLogger.info("For " + str(myDayCount) + " days, business-NaN takes " + str(datetime.datetime.now() - myExTime))

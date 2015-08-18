@@ -8,12 +8,15 @@ import pandas
 def inferTimeOfDay(aSaleConditionString):
     if pandas.isnull(aSaleConditionString):
         return "Regular"
-    aSaleConditionString = aSaleConditionString.replace("@", "")
-    myCodeDict = {"O":"Open", "Q":"Open", "M":"Close", "6":"Close",
-                  "T":"After-Hours", "U":"After-Hours", "@":"Regular"}
-    try:
-        return myCodeDict[aSaleConditionString]
-    except:
+    #myCodeDict = {"O":"Open", "Q":"Open", "M":"Close", "6":"Close",
+    #              "T":"After-Hours", "U":"After-Hours", "@":"Regular"}
+    if ('O' in aSaleConditionString) or ('Q' in aSaleConditionString):
+        return "Open"
+    elif ('M' in aSaleConditionString) or ('6' in aSaleConditionString):
+        return "Open"
+    elif ('T' in aSaleConditionString) or ('U' in aSaleConditionString):
+        return "Open"
+    else:
         return "Regular"  
 def inferExchange(aExchangeString):
     try:
@@ -37,7 +40,8 @@ def processTradesDF(aTradesDF, aSymbol):
     aTradesDF['TOD'] = aTradesDF['COND'].apply(lambda x: inferTimeOfDay(x))
     #print("TOD decoding time: %s seconds." % (time.time() - t))
     t=time.time()
-    aTradesDF = aTradesDF.drop(["G127", "CORR", "DATE", "TIME", "EX"], 1)
+    aTradesDF = aTradesDF.drop(["G127", "CORR", "DATE", "TIME"], 1)
+    #aTradesDF = aTradesDF.drop(["G127", "CORR", "DATE", "TIME", "EX"], 1)
     aTradesDF = aTradesDF.set_index('DATETIME')
     #print("Time indexing time: %s seconds." % (time.time() - t))
     t=time.time()
@@ -51,9 +55,10 @@ def updateMasterWithRowCache(aMaster, aRowCache, aSymbol):
     myTrades = processTradesDF(myTrades, aSymbol)
     if not myTrades.empty:
         myTrades['SIZE'] = myTrades['SIZE'].astype(float) 
-        #myGroupedVolumes = myTrades.groupby([pandas.TimeGrouper('1D'), "EXCHANGE", "COND"])['SIZE'].apply(lambda x: sum(x))
-        myGroupedVolumes = myTrades.groupby([pandas.TimeGrouper('1D'), "EXCHANGE"])['SIZE'].apply(lambda x: sum(x))
-        myProps = myGroupedVolumes.groupby(level=0).apply(lambda x: x/x.sum())
+        myGroupedVolumes = myTrades.groupby([pandas.TimeGrouper('1D'), "EX"])['SIZE'].apply(lambda x: sum(x))
+        #myGroupedVolumes = myTrades.groupby([pandas.TimeGrouper('5M'), "EX"])['SIZE'].apply(lambda x: sum(x))
+        #myProps = myGroupedVolumes.groupby(level=0).apply(lambda x: x/x.sum())
+        myProps = myGroupedVolumes
         aMaster = pandas.concat([aMaster, myProps])
     return(aMaster)
 def trawlCSV(aCSVFile, aStartDateTime, aEndDateTime, aTimeInterval, aSymbol, aStartTime, aEndTime):
@@ -85,33 +90,20 @@ if __name__ == '__main__':
                   "T/Q":"NASDAQ TQ", "Q":"NASDAQ Q", "W":"CBSX", "X":"NASDAQ PSX", "Y":"BATS BYX", "Z":"BATS BZX"} 
     myFileNameFolder = os.getcwd() + "\\..\\data\\2014SymbolData\\"
     myOutputFolder = os.getcwd() + "\\..\\output\\2014SymbolShares\\"
-    mySymbol = "AMD"
+    myTimeStart = datetime.datetime.strptime("09:30:00", "%H:%M:%S").time()
+    myTimeEnd = datetime.datetime.strptime("16:00:00", "%H:%M:%S").time()
+    myStartDateTime = datetime.datetime.strptime('20140101 00:00:00', '%Y%m%d %H:%M:%S')
+    myEndDateTime = datetime.datetime.strptime('20141231 00:00:00', '%Y%m%d %H:%M:%S')
+    myTimeInterval = datetime.timedelta(days=1)
     mySymbols = ["AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY"]
-    mySymbols = ["GRPN", "JBLU", "MSFT", "RAD", "SPY"]
+    mySymbols = ["MSFT", "RAD", "SPY"]
+    mySymbols = ["AMD"]
     for mySymbol in mySymbols:
         myFileName = mySymbol
-        myTimeStart = datetime.datetime.strptime("09:30:00", "%H:%M:%S").time()
-        myTimeEnd = datetime.datetime.strptime("15:59:59", "%H:%M:%S").time()
         
-        myStartDateTime = datetime.datetime.strptime('20140101 00:00:00', '%Y%m%d %H:%M:%S')
-        myEndDateTime = datetime.datetime.strptime('20141231 00:00:00', '%Y%m%d %H:%M:%S')
-        myTimeInterval = datetime.timedelta(days=1)
         myMaster = trawlCSV(myFileNameFolder+myFileName+".csv", myStartDateTime, myEndDateTime, myTimeInterval,
                             mySymbol, myTimeStart, myTimeEnd)
         
         print(myMaster)
         myMaster.to_csv(myOutputFolder + myFileName + ".csv")
-        print("Finished.")
-    """
-    myTrades = pandas.read_csv(myFileNameFolder+myFileName)
-    myTrades = processTradesDF(myTrades)
-    
-    t=time.time()
-    myGroupedVolumes = myTrades.groupby([pandas.TimeGrouper('5Min'), "EXCHANGE", "COND"])['SIZE'].apply(lambda x: sum(x))
-    myProps = myGroupedVolumes.groupby(level=0).apply(lambda x: x/x.sum())
-    print("Grouping time: %s seconds." % (time.time() - t))
-    t=time.time()
-    
-    myGroupedVolumes.to_csv(myFileNameFolder + "MSFTDay18TODCondVol" + ".csv")
-    print(myProps)
-    print("Remaining time: %s seconds." % (time.time() - t))"""
+    print("Finished.")

@@ -190,12 +190,13 @@ runRegressions <- function(mySymbol, myIntervalStyle, myIntervals, myEmptyBehavi
     }
     
     myBSeries = replaceWithBinary(mySeries, myExchangeColumns)
+    myVolumes = myBSeries$totalVolume
     
     for(exc in myExchangeColumns){
       y = myBSeries[,exc]
       y=ts(y)
       
-      fit <- dyn$lm(y ~ lag(y,-1) + lag(y,-2) + lag(y,-3) + lag(y,-4) + lag(y,-5), na.action = na.omit)
+      fit <- dyn$lm(y ~ lag(y,-1) + lag(y,-2) + lag(y,-3) + lag(y,-4) + lag(y,-5) + myVolumes, na.action = na.omit)
       myCoeffs<-summary(fit)$coefficients[,1]
       myPs<-summary(fit)$coefficients[,4]
       
@@ -232,3 +233,7 @@ for(mySymbol in mySymbols){
   #createAllGraphs(mySymbol, "business", myBusinessIntervals, "NaN")
     
 }
+
+myIntervalStyle = "clock"
+myIntervals = myTimeIntervals
+myEmptyBehavior = "NaN"

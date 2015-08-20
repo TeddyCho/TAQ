@@ -28,6 +28,9 @@ def inferTimeOfDay(aSaleConditionString):
         return "Regular"  
 
 def inferExchange(aExchangeString):
+    myCodeDict = {"A":"NYSE MKT", "B":"NASDAQ BX", "C":"NSX", "D":"FINRA", "I":"ISE", "J":"BATS EDGA",
+                  "K":"BATS EDGX", "M":"CHX", "N":"NYSE", "T":"NASDAQ", "P":"NYSE Arca", "S":"Consolidated Tape System",
+                  "T/Q":"NASDAQ", "Q":"NASDAQ", "W":"CBSX", "X":"NASDAQ PSX", "Y":"BATS BYX", "Z":"BATS BZX"} 
     try:
         return myCodeDict[aExchangeString]
     except:

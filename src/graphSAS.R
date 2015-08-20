@@ -33,7 +33,7 @@ plotData <- function(myTable, myFileName, myChartStyle){
   thePlot$set(width = 1200, height = 800)
   
   thePlot$set(title = paste("Exchange Shares (1993-2014)", sep=""))
-  thePlot$save(paste('C:\\Users\\tcho\\Documents\\Github\\TAQ\\', 
+  thePlot$save(paste('C:\\Users\\tcho\\Dropbox\\Project - Platform Competition\\Code\\TAQ\\', 
                      'output\\exchangeShares\\', myFileName, '.html', sep=""),
                standalone = TRUE)
   return(thePlot)

@@ -197,12 +197,17 @@ runRegressions <- function(mySymbol, myIntervalStyle, myIntervals, myEmptyBehavi
       y=ts(y)
       
       fit <- dyn$lm(y ~ lag(y,-1) + lag(y,-2) + lag(y,-3) + lag(y,-4) + lag(y,-5) + myVolumes, na.action = na.omit)
+      
+      myData = data.frame(y, myVolumes)
+      fit = dyn$glm(y ~ lag(y,-1) + lag(y,-2) + lag(y,-3) + lag(y,-4) + lag(y,-5) + myVolumes, 
+                    family = binomial(link = "probit"), na.action=na.omit)
       myCoeffs<-summary(fit)$coefficients[,1]
       myPs<-summary(fit)$coefficients[,4]
       
       myNewRow <- data.frame(symbol=mySymbol, interval=myInterval,exchange = exc,Intercept=myCoeffs[1],
                              Lag1=myCoeffs[2],Lag2=myCoeffs[3],Lag3=myCoeffs[4],Lag4=myCoeffs[5],
-                             Lag5=myCoeffs[6],P0=myPs[1], P1=myPs[2],P2=myPs[3],P3=myPs[4],P4=myPs[5],P5=myPs[6])
+                             Lag5=myCoeffs[6],Volume=myCoeffs[7],
+                             P0=myPs[1], P1=myPs[2],P2=myPs[3],P3=myPs[4],P4=myPs[5],P5=myPs[6],PVolume=myPs[7])
       myResults <- rbind(myResults, myNewRow)
     }
   }
@@ -212,21 +217,20 @@ runRegressions <- function(mySymbol, myIntervalStyle, myIntervals, myEmptyBehavi
   dir.create(myOutputFolder, showWarnings=FALSE, recursive=TRUE)
   
   write.csv(myResults, file = paste(myOutputFolder,"regression.csv", sep=""))
-  
+  print(paste(myOutputFolder,"regression.csv", sep=""))
   return(myResults)
 }
 
 mySymbols = c("AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
 
-mySymbols = c("SPY", "JBLU")
-setwd(paste("C:/Users/tcho/Documents/Github/TAQ/", sep=""))
+setwd('C:\\Users\\tcho\\Dropbox\\Project - Platform Competition\\Code\\TAQ')
 
 for(mySymbol in mySymbols){
   myTimeIntervals = c(1, 30, 60, 300, 600, 3600)
   myBusinessIntervals = c(5,10,20)
   
   myRegressionResults <- runRegressions(mySymbol, "clock" , myTimeIntervals, "NaN")
-  myRegressionResults <- runRegressions(mySymbol, "business" , myBusinessIntervals, "NaN")
+  #myRegressionResults <- runRegressions(mySymbol, "business" , myBusinessIntervals, "NaN")
   
   #createAllGraphs(mySymbol, "clock", myTimeIntervals, "NaN")
   #createAllGraphs(mySymbol, "clock", myTimeIntervals, "ThrowOut")

@@ -55,3 +55,101 @@
 12:55:13,830 AMD INFO For 10 days, reading data takes 0:00:13.233389
 12:55:34,706 AMD INFO For 10 days, clock-NaN takes 0:00:20.876821
 12:55:34,706 AMD INFO For 10 days, business-NaN takes 0:00:00
+10:05:17,694 root INFO Partitioning Trades
+10:05:31,89 AMD INFO For 10 days, reading data takes 0:00:13.394507
+10:05:52,496 AMD INFO For 10 days, clock-NaN takes 0:00:21.407194
+10:05:52,496 AMD INFO For 10 days, business-NaN takes 0:00:00
+10:06:04,561 root INFO Partitioning Trades
+10:06:16,935 AMD INFO For 10 days, reading data takes 0:00:12.373797
+10:06:37,816 AMD INFO For 10 days, clock-NaN takes 0:00:20.880803
+10:06:37,816 AMD INFO For 10 days, business-NaN takes 0:00:00
+10:07:35,82 BAC INFO For 10 days, reading data takes 0:00:57.265646
+10:08:15,869 BAC INFO For 10 days, clock-NaN takes 0:00:40.786973
+10:08:15,869 BAC INFO For 10 days, business-NaN takes 0:00:00
+10:08:16,332 BRKA INFO For 10 days, reading data takes 0:00:00.462329
+10:08:21,709 BRKA INFO For 10 days, clock-NaN takes 0:00:05.375814
+10:08:21,709 BRKA INFO For 10 days, business-NaN takes 0:00:00
+10:08:30,78 BRKB INFO For 10 days, reading data takes 0:00:08.367939
+10:08:51,279 BRKB INFO For 10 days, clock-NaN takes 0:00:21.201047
+10:08:51,279 BRKB INFO For 10 days, business-NaN takes 0:00:00
+10:09:27,592 C INFO For 10 days, reading data takes 0:00:36.312775
+10:10:00,700 C INFO For 10 days, clock-NaN takes 0:00:33.108496
+10:10:00,700 C INFO For 10 days, business-NaN takes 0:00:00
+10:10:13,140 GOOG INFO For 10 days, reading data takes 0:00:12.439831
+10:26:44,693 root INFO Partitioning Trades
+10:26:57,119 AMD INFO For 10 days, reading data takes 0:00:12.426819
+10:27:20,262 AMD INFO For 10 days, clock-NaN takes 0:00:23.142641
+10:27:20,262 AMD INFO For 10 days, business-NaN takes 0:00:00
+10:28:18,816 BAC INFO For 10 days, reading data takes 0:00:58.553561
+10:28:40,258 root INFO Partitioning Trades
+10:28:47,647 root INFO Partitioning Trades
+10:29:01,726 AMD INFO For 10 days, reading data takes 0:00:14.078992
+10:29:28,900 AMD INFO For 10 days, clock-NaN takes 0:00:27.174287
+10:29:28,901 AMD INFO For 10 days, business-NaN takes 0:00:00
+10:30:30,304 BAC INFO For 10 days, reading data takes 0:01:01.402580
+10:31:26,472 BAC INFO For 10 days, clock-NaN takes 0:00:56.167865
+10:31:26,472 BAC INFO For 10 days, business-NaN takes 0:00:00
+10:31:26,791 BRKA INFO For 10 days, reading data takes 0:00:00.318238
+10:31:31,504 BRKA INFO For 10 days, clock-NaN takes 0:00:04.712343
+10:31:31,504 BRKA INFO For 10 days, business-NaN takes 0:00:00
+10:31:40,29 BRKB INFO For 10 days, reading data takes 0:00:08.524049
+10:32:03,250 BRKB INFO For 10 days, clock-NaN takes 0:00:23.220481
+10:32:03,251 BRKB INFO For 10 days, business-NaN takes 0:00:00
+10:32:39,663 C INFO For 10 days, reading data takes 0:00:36.411844
+10:33:23,170 C INFO For 10 days, clock-NaN takes 0:00:43.507878
+10:33:23,171 C INFO For 10 days, business-NaN takes 0:00:00
+10:33:36,340 GOOG INFO For 10 days, reading data takes 0:00:13.168348
+10:34:08,521 GOOG INFO For 10 days, clock-NaN takes 0:00:32.180839
+10:34:08,521 GOOG INFO For 10 days, business-NaN takes 0:00:00
+10:34:31,548 GRPN INFO For 10 days, reading data takes 0:00:23.027360
+10:35:02,108 GRPN INFO For 10 days, clock-NaN takes 0:00:30.558671
+10:35:02,108 GRPN INFO For 10 days, business-NaN takes 0:00:00
+10:35:13,456 JBLU INFO For 10 days, reading data takes 0:00:11.347052
+10:35:33,549 JBLU INFO For 10 days, clock-NaN takes 0:00:20.092259
+10:35:33,549 JBLU INFO For 10 days, business-NaN takes 0:00:00
+10:36:27,331 MSFT INFO For 10 days, reading data takes 0:00:53.782175
+10:37:16,499 MSFT INFO For 10 days, clock-NaN takes 0:00:49.167893
+10:37:16,500 MSFT INFO For 10 days, business-NaN takes 0:00:00
+10:37:33,182 RAD INFO For 10 days, reading data takes 0:00:16.681839
+10:38:03,135 RAD INFO For 10 days, clock-NaN takes 0:00:29.952258
+10:38:03,135 RAD INFO For 10 days, business-NaN takes 0:00:00
+10:39:35,680 root INFO Partitioning Trades
+10:39:56,106 root INFO Partitioning Trades
+10:41:19,283 root INFO Partitioning Trades
+10:41:24,62 root INFO Partitioning Trades
+10:43:19,868 root INFO Partitioning Trades
+10:43:51,123 root INFO Partitioning Trades
+10:44:08,750 root INFO Partitioning Trades
+10:44:21,721 AMD INFO For 10 days, reading data takes 0:00:12.970206
+10:44:43,604 AMD INFO For 10 days, clock-NaN takes 0:00:21.883531
+10:44:43,604 AMD INFO For 10 days, business-NaN takes 0:00:00
+10:45:39,82 BAC INFO For 10 days, reading data takes 0:00:55.477392
+10:46:20,474 BAC INFO For 10 days, clock-NaN takes 0:00:41.392361
+10:46:20,475 BAC INFO For 10 days, business-NaN takes 0:00:00
+10:46:20,819 BRKA INFO For 10 days, reading data takes 0:00:00.344242
+10:46:30,111 BRKA INFO For 10 days, clock-NaN takes 0:00:09.291597
+10:46:30,112 BRKA INFO For 10 days, business-NaN takes 0:00:00
+10:46:37,708 BRKB INFO For 10 days, reading data takes 0:00:07.596389
+10:47:00,309 BRKB INFO For 10 days, clock-NaN takes 0:00:22.601041
+10:47:00,310 BRKB INFO For 10 days, business-NaN takes 0:00:00
+10:47:37,625 C INFO For 10 days, reading data takes 0:00:37.314483
+10:48:26,57 C INFO For 10 days, clock-NaN takes 0:00:48.432375
+10:48:26,57 C INFO For 10 days, business-NaN takes 0:00:00
+10:48:39,240 GOOG INFO For 10 days, reading data takes 0:00:13.183357
+10:49:05,64 GOOG INFO For 10 days, clock-NaN takes 0:00:25.823328
+10:49:05,65 GOOG INFO For 10 days, business-NaN takes 0:00:00
+10:49:27,770 GRPN INFO For 10 days, reading data takes 0:00:22.705116
+10:49:52,435 GRPN INFO For 10 days, clock-NaN takes 0:00:24.664505
+10:49:52,435 GRPN INFO For 10 days, business-NaN takes 0:00:00
+10:50:01,998 JBLU INFO For 10 days, reading data takes 0:00:09.562786
+10:50:19,231 JBLU INFO For 10 days, clock-NaN takes 0:00:17.233232
+10:50:19,231 JBLU INFO For 10 days, business-NaN takes 0:00:00
+10:50:59,739 MSFT INFO For 10 days, reading data takes 0:00:40.507749
+10:51:37,294 MSFT INFO For 10 days, clock-NaN takes 0:00:37.553654
+10:51:37,294 MSFT INFO For 10 days, business-NaN takes 0:00:00
+10:51:53,760 RAD INFO For 10 days, reading data takes 0:00:16.466686
+10:52:16,258 RAD INFO For 10 days, clock-NaN takes 0:00:22.496968
+10:52:16,258 RAD INFO For 10 days, business-NaN takes 0:00:00
+10:53:47,253 SPY INFO For 10 days, reading data takes 0:01:30.994601
+10:55:08,365 SPY INFO For 10 days, clock-NaN takes 0:01:21.110550
+10:55:08,365 SPY INFO For 10 days, business-NaN takes 0:00:00

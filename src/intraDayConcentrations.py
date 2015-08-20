@@ -176,7 +176,6 @@ def computeTotalExchangeProportionsPerInterval(myPerDateTradeList, myStartTime, 
     myExchangeProportionsPerInterval = [line for dateList in myPerDateExchangeProportionsPerInterval.values() for line in dateList]
     myExchangeProportionsPerInterval = sorted(myExchangeProportionsPerInterval, key=lambda k: k['startTime'])
     
-    theResult = myExchangeProportionsPerInterval
     print("transforming to scores")
     theResult = transformProportionsToScores(myExchangeProportionsPerInterval, myExchanges)
     
@@ -200,11 +199,10 @@ def createIntervaledFiles(myPerDateTradeList, myExchange, mySymbol, myStartTime,
                                           myIntervalStyle + "Intervals\\" + mySymbol + "\\",
                                           myEmptyBehavior + str(i),
                                           myEmptyCount, myIntervalCount)
-        return(myPerDateExchPropsPerInterv)
+        #return(myPerDateExchPropsPerInterv)
     
 if __name__ == "__main__":
     mySymbols = ["AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY"]
-    mySymbols = ["AMD"]
     myDayCount = 30
     myDayCount = 10
     logging.basicConfig(filename="loglogloglog",

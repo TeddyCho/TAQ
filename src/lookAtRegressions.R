@@ -1,7 +1,14 @@
 myIntervalStyle = "clock"
-mySymbol = "BRKA"
+mySymbol = "AMD"
 myEmptyBehavior = "NaN"
-myInterval = 60
+
+mySymbols = c("AMD", "BAC", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
+for(mySymbol in mySymbols){
+
+myTimeIntervals = c(1, 30, 60, 300, 600, 3600)
+for(myInterval in myTimeIntervals){
+
+setwd('C:\\Users\\tcho\\Dropbox\\Project - Platform Competition\\Code\\TAQ')
 
 myFolder = paste(getwd(), "/output/regression/", mySymbol, "/",
       myIntervalStyle, myEmptyBehavior, "/",sep="")
@@ -18,10 +25,13 @@ myCoeffs = rbind(cbind(rep(0, myNumberOfExchanges), myFilterSeries$Intercept),
                  cbind(rep(2, myNumberOfExchanges), myFilterSeries$Lag2),
                  cbind(rep(3, myNumberOfExchanges), myFilterSeries$Lag3),
                  cbind(rep(4, myNumberOfExchanges), myFilterSeries$Lag4),
-                 cbind(rep(5, myNumberOfExchanges), myFilterSeries$Lag5))
+                 cbind(rep(5, myNumberOfExchanges), myFilterSeries$Lag5),
+                 cbind(rep(6, myNumberOfExchanges), myFilterSeries$Volume))
 
 
 png(paste(myFolder, myInterval, "coeffs.png", sep=""))
 plot(myCoeffs, xlab = "Lagged Variable", ylab="Coefficient", main=paste(mySymbol, " ", myIntervalStyle, " ",
                                                                         myInterval, sep=""))
 dev.off()
+}
+}

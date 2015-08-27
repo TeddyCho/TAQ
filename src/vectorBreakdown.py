@@ -33,14 +33,15 @@ def processTradesDF(aTradesDF, aSymbol):
     aTradesDF = aTradesDF.between_time(myTimeStart, myTimeEnd)
     aTradesDF = aTradesDF[(aTradesDF["EXCHANGE"] != "FINRA") & (aTradesDF['TOD'] == "Regular") & (aTradesDF["SYMBOL"] == aSymbol)]
     return(aTradesDF)
-def updateMasterWithRowCache(aMaster, aRowCache, aSymbol, aIntervalSize):
+def updateMasterWithRowCache(aMaster, aRowCache, aSymbol, aIntervalSize, aCacheMinTime, aCacheMaxTime):
     myTrades = pandas.DataFrame(aRowCache)
     myTrades = processTradesDF(myTrades, aSymbol)
     if not myTrades.empty:
         myTrades['SIZE'] = myTrades['SIZE'].astype(float) 
         myGroupedVolumes = myTrades.groupby([pandas.TimeGrouper(aIntervalSize), 'EX'])['SIZE'].apply(lambda x: sum(x))
         #myProps = myGroupedVolumes.groupby(level=0).apply(lambda x: x/x.sum())
-        
+        idx = pandas.date_range(aCacheMinTime, aCacheMaxTime, freq=aIntervalSize)
+        input(myGroupedVolumes)
         aMaster = pandas.concat([aMaster, myGroupedVolumes])
     return(aMaster)
 def trawlCSV(aCSVFile, aStartDateTime, aEndDateTime, aTimeInterval, aSymbol, aStartTime, aEndTime, aIntervalSize):
@@ -56,7 +57,8 @@ def trawlCSV(aCSVFile, aStartDateTime, aEndDateTime, aTimeInterval, aSymbol, aSt
                 else:
                     if myRowCache:
                         print(aSymbol + ": " + str(aStartDateTime))
-                        myMasterProps = updateMasterWithRowCache(myMasterProps, myRowCache, aSymbol, aIntervalSize)
+                        myMasterProps = updateMasterWithRowCache(myMasterProps, myRowCache, aSymbol, aIntervalSize,
+                                                                 aStartDateTime, aStartDateTime+aTimeInterval)
                         del myRowCache[:]
                     while (aStartDateTime + aTimeInterval) < myRowDateTime:
                         aStartDateTime = aStartDateTime + aTimeInterval
@@ -64,7 +66,8 @@ def trawlCSV(aCSVFile, aStartDateTime, aEndDateTime, aTimeInterval, aSymbol, aSt
             if myRowDateTime >= aEndDateTime:
                 break
     print(aSymbol + ": " + str(aStartDateTime))
-    myMasterProps = updateMasterWithRowCache(myMasterProps, myRowCache, aSymbol, aIntervalSize)
+    myMasterProps = updateMasterWithRowCache(myMasterProps, myRowCache, aSymbol, aIntervalSize,
+                                             aStartDateTime, aStartDateTime+aTimeInterval)
     return(myMasterProps)
 if __name__ == '__main__':
     myFileNameFolder = os.getcwd() + "\\..\\data\\2014SymbolData\\"
@@ -77,6 +80,7 @@ if __name__ == '__main__':
     myIntervalSize = '1Min'
     mySymbols = ["AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY"]
     mySymbols = ["AMD"]
+    
     for mySymbol in mySymbols:
         myFileName = mySymbol
         

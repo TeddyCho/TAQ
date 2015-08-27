@@ -5,7 +5,6 @@ library(xtable)
 library(reshape)
 library(base64enc)
 
-
 readData <- function(myFileName){
   myDirectory = "C:\\Users\\tcho\\Dropbox\\Project - Platform Competition\\Paul Notes\\daily marketshare\\"
   myFilePath = paste(myDirectory, myFileName, ".csv", sep="")
@@ -13,11 +12,23 @@ readData <- function(myFileName){
   return(myShares)
 }
 formatData <- function(myShares){
+  code = c("A", "B", "C", "D", "I", "J", "K", "M", "N", "T", "P",
+           "S", "T/Q", "Q", "W", "X", "Y", "Z", "DATE", "X_1", "O")
+  exchange = c("NYSE MKT","NASDAQ BX","NSX", "FINRA", "ISE", "BATS EDGA","BATS EDGX","CHX",
+               "NYSE","NASDAQ T","NYSE Arca","Consolidated Tape System","NASDAQ TQ", "NASDAQ Q", 
+               "CBSX", "NASDAQ PSX", "BATS BYX", "BATS BZX", "DATE", "UNKNOWN_X_1", "UNKNOWN_O")
+  myColMap = data.frame(code, exchange)
+  
   myIndexOfColName <- match(colnames(myShares), myColMap[,1])
   colnames(myShares) <- myColMap[myIndexOfColName,2]
-  myShares[is.na(myShares)] =0
+  myShares[is.na(myShares)] = 0
+  
   myTable <- melt(myShares, id=c("DATE"))
   colnames(myTable) <- c("DATE", "EXCHANGE", "SHARE")
+  
+  myTable$DATE <- as.Date(as.character(myTable$DATE), format("%Y%m%d"))
+  myTable <- myTable[myTable$DATE > as.Date("20040101", format("%Y%m%d")) & 
+                       myTable$DATE < as.Date("20100101", format("%Y%m%d")),]
   return(myTable)
 }
 plotData <- function(myTable, myFileName, myChartStyle){
@@ -39,18 +50,9 @@ plotData <- function(myTable, myFileName, myChartStyle){
   return(thePlot)
 }
 
-code = c("A", "B", "C", "D", "I", "J", "K", "M", "N", "T", "P",
-         "S", "T/Q", "Q", "W", "X", "Y", "Z", "DATE", "X_1", "O")
-exchange = c("NYSE MKT","NASDAQ BX","NSX", "FINRA", "ISE", "BATS EDGA","BATS EDGX","CHX",
-             "NYSE","NASDAQ T","NYSE Arca","Consolidated Tape System","NASDAQ TQ", "NASDAQ Q", 
-             "CBSX", "NASDAQ PSX", "BATS BYX", "BATS BZX", "DATE", "UNKNOWN_X_1", "UNKNOWN_O")
-myColMap = data.frame(code, exchange)
 
 myFileName = 'daily_ms_volume'
 myShares <- readData(myFileName)
 myTable <- formatData(myShares)
-myTable$DATE <- as.Date(as.character(myTable$DATE), format("%Y%m%d"))
-myTable <- myTable[myTable$DATE > as.Date("20040101", format("%Y%m%d")) & 
-                     myTable$DATE < as.Date("20100101", format("%Y%m%d")),]
 thePlot <- plotData(myTable, myFileName, "lineChart")
 print(myFileName)

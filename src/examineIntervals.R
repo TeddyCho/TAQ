@@ -223,6 +223,8 @@ runRegressions <- function(mySymbol, myIntervalStyle, myIntervals, myEmptyBehavi
 
 mySymbols = c("AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
 
+mySymbols = c( "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
+
 setwd('C:\\Users\\tcho\\Dropbox\\Project - Platform Competition\\Code\\TAQ')
 
 for(mySymbol in mySymbols){

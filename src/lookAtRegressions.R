@@ -1,3 +1,4 @@
+library(ggplot2)
 myIntervalStyle = "clock"
 mySymbol = "AMD"
 myEmptyBehavior = "NaN"
@@ -6,6 +7,7 @@ myInterval = 60
 mySymbols = c("AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
 
 mySymbols = c("AMD", "BAC", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
+mySymbols=c("BRKA", "BRKB")
 for(mySymbol in mySymbols){
   myTimeIntervals = c(1, 30, 60, 300, 600, 3600)
   for(myInterval in myTimeIntervals){

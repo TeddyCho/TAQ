@@ -196,7 +196,8 @@ runRegressions <- function(mySymbol, myIntervalStyle, myIntervals, myEmptyBehavi
       y = myBSeries[,exc]
       y=ts(y)
       
-      fit <- dyn$lm(y ~ lag(y,-1) + lag(y,-2) + lag(y,-3) + lag(y,-4) + lag(y,-5) + myVolumes, na.action = na.omit)
+      fit <- dyn$lm(y ~ lag(y,-1) + lag(y,-2) + lag(y,-3) + lag(y,-4) + lag(y,-5) + myVolumes,
+                    na.action = na.omit)
       
       myData = data.frame(y, myVolumes)
       fit = dyn$glm(y ~ lag(y,-1) + lag(y,-2) + lag(y,-3) + lag(y,-4) + lag(y,-5) + myVolumes, 
@@ -224,6 +225,7 @@ runRegressions <- function(mySymbol, myIntervalStyle, myIntervals, myEmptyBehavi
 mySymbols = c("AMD", "BAC", "BRKA", "BRKB", "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
 
 mySymbols = c( "C", "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
+mySymbols = c( "GOOG", "GRPN", "JBLU", "MSFT", "RAD", "SPY")
 
 setwd('C:\\Users\\tcho\\Dropbox\\Project - Platform Competition\\Code\\TAQ')
 
